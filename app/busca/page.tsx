@@ -26,6 +26,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
   if (!termo) return null;
 
   const resultado = await buscarNoticias(termo);
+  if (!resultado.ok) return <p>{resultado.erro}</p>;
   if (resultado.noticias.length === 0)
     return <p>Nenhuma notícia encontrada.</p>;
 
