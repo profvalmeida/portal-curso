@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { site } from "../lib/site";
 import estilos from "./Cabecalho.module.css";
 
 export default function Cabecalho() {
@@ -6,12 +7,14 @@ export default function Cabecalho() {
     <header className={estilos.cabecalho}>
       <div className={estilos.conteudo}>
         <Link href="/" className={estilos.marca}>
-          Portal de Notícias
+          {site.nome}
         </Link>
         <nav className={estilos.menu}>
-          <Link href="/">Início</Link>
-          <Link href="/sobre">Sobre</Link>
-          <Link href="/busca">Buscar</Link>
+          {site.menu.map((item) => (
+            <Link key={item.href} href={item.href}>
+              {item.rotulo}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>
