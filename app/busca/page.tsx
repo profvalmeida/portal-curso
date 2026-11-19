@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Manchete from "../componentes/Manchete";
-import type { Noticia } from "../dados/noticias";
+import type { NoticiaResumida } from "../dados/noticias";
 import { sql } from "../lib/db";
 import estilos from "../page.module.css";
 
@@ -16,7 +16,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
     JOIN categorias ON categorias.id = noticias.categoria_id
     WHERE titulo ILIKE ${"%" + termo + "%"}
     ORDER BY noticias.id DESC
-  `) as Noticia[];
+  `) as NoticiaResumida[];
 
   if (noticias.length === 0) return <p>Nenhuma notícia encontrada.</p>;
 
