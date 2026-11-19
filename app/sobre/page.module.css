@@ -1,0 +1,5 @@
+.titulo {
+  color: var(--cor-destaque);
+  font-size: 2.25rem;
+  margin-bottom: var(--espaco-2);
+}
