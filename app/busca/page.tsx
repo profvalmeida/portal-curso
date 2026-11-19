@@ -1,0 +1,48 @@
+import { Suspense } from "react";
+import Manchete from "../componentes/Manchete";
+import type { Noticia } from "../dados/noticias";
+import { sql } from "../lib/db";
+import estilos from "../page.module.css";
+
+async function Resultados({ searchParams }: PageProps<"/busca">) {
+  const { q } = await searchParams;
+  const termo = typeof q === "string" ? q : "";
+  if (!termo) return null;
+
+  // PERIGO: o texto da pessoa entra direto no meio do SQL
+  const noticias = (await sql.query(
+    "SELECT id, titulo, resumo, minutos FROM noticias WHERE titulo ILIKE '%" +
+      termo +
+      "%' ORDER BY id DESC",
+  )) as Noticia[];
+
+  if (noticias.length === 0) return <p>Nenhuma notícia encontrada.</p>;
+
+  return (
+    <section className={estilos.grade}>
+      {noticias.map((noticia) => (
+        <Manchete
+          key={noticia.id}
+          titulo={noticia.titulo}
+          resumo={noticia.resumo}
+          minutos={noticia.minutos}
+        />
+      ))}
+    </section>
+  );
+}
+
+export default function Busca(props: PageProps<"/busca">) {
+  return (
+    <main>
+      <h1>Buscar notícias</h1>
+      <form>
+        <input name="q" placeholder="Digite uma palavra do título" />
+        <button>Buscar</button>
+      </form>
+      <Suspense fallback={<p>Buscando…</p>}>
+        <Resultados {...props} />
+      </Suspense>
+    </main>
+  );
+}

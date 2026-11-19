@@ -11,6 +11,7 @@ export default function Cabecalho() {
         <nav className={estilos.menu}>
           <Link href="/">Início</Link>
           <Link href="/sobre">Sobre</Link>
+          <Link href="/busca">Buscar</Link>
         </nav>
       </div>
     </header>
