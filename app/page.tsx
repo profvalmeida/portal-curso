@@ -1,29 +1,25 @@
 import Manchete from "./componentes/Manchete";
+import { noticias } from "./dados/noticias";
+import estilos from "./page.module.css";
 
 export default function Home() {
   const nome = "Portal de Notícias";
-  const total = 3;
+  const total = noticias.length;
 
   return (
     <main>
       <h1>{nome}</h1>
       <p>Temos {total} notícias hoje.</p>
-      <hr />
-      <Manchete
-        titulo="Next.js ganha nova versão"
-        resumo="Confira o que mudou no framework."
-        minutos={4}
-      />
-      <Manchete
-        titulo="Prefeitura inaugura ciclovia no centro"
-        resumo="São oito quilômetros ligando os bairros à estação."
-        minutos={3}
-      />
-      <Manchete
-        titulo="Feira do livro começa neste sábado"
-        resumo="O evento reúne autores da região e tem entrada gratuita."
-        minutos={2}
-      />
+      <section className={estilos.grade}>
+        {noticias.map((noticia) => (
+          <Manchete
+            key={noticia.id}
+            titulo={noticia.titulo}
+            resumo={noticia.resumo}
+            minutos={noticia.minutos}
+          />
+        ))}
+      </section>
     </main>
   );
 }
