@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Manchete from "./componentes/Manchete";
-import type { Noticia } from "./dados/noticias";
+import type { NoticiaResumida } from "./dados/noticias";
 import { sql } from "./lib/db";
 import estilos from "./page.module.css";
 
@@ -10,7 +10,7 @@ async function ListaDeNoticias() {
     FROM noticias
     JOIN categorias ON categorias.id = noticias.categoria_id
     ORDER BY noticias.id DESC
-  `) as Noticia[];
+  `) as NoticiaResumida[];
 
   return (
     <>
