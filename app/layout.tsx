@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Cabecalho from "./componentes/Cabecalho";
+import Rodape from "./componentes/Rodape";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,17 +12,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR">
       <body>
-        <nav>
-          <ul>
-            <li>
-              <Link href="/">Início</Link>
-            </li>
-            <li>
-              <Link href="/sobre">Sobre</Link>
-            </li>
-          </ul>
-        </nav>
+        <Cabecalho />
         {children}
+        <Rodape />
       </body>
     </html>
   );
