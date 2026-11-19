@@ -1,15 +1,19 @@
+import { Suspense } from "react";
 import Manchete from "./componentes/Manchete";
-import { noticias } from "./dados/noticias";
+import type { Noticia } from "./dados/noticias";
+import { sql } from "./lib/db";
 import estilos from "./page.module.css";
 
-export default function Home() {
-  const nome = "Portal de Notícias";
-  const total = noticias.length;
+async function ListaDeNoticias() {
+  const noticias = (await sql`
+    SELECT id, titulo, resumo, minutos
+    FROM noticias
+    ORDER BY id DESC
+  `) as Noticia[];
 
   return (
-    <main>
-      <h1>{nome}</h1>
-      <p>Temos {total} notícias hoje.</p>
+    <>
+      <p>Temos {noticias.length} notícias hoje.</p>
       <section className={estilos.grade}>
         {noticias.map((noticia) => (
           <Manchete
@@ -20,6 +24,19 @@ export default function Home() {
           />
         ))}
       </section>
+    </>
+  );
+}
+
+export default function Home() {
+  const nome = "Portal de Notícias";
+
+  return (
+    <main>
+      <h1>{nome}</h1>
+      <Suspense fallback={<p>Carregando as notícias…</p>}>
+        <ListaDeNoticias />
+      </Suspense>
     </main>
   );
 }
