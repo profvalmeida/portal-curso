@@ -23,7 +23,7 @@
 body {
   background: var(--cor-fundo);
   color: var(--cor-texto);
-  font-family: system-ui, sans-serif;
+  font-family: var(--fonte-texto), system-ui, sans-serif;
   line-height: 1.6;
   min-height: 100vh;
   display: flex;
@@ -40,4 +40,9 @@ main {
 
 a {
   color: var(--cor-destaque);
+}
+
+h1,
+h2 {
+  font-family: var(--fonte-titulo), Georgia, serif;
 }

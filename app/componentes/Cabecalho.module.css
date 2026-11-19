@@ -14,6 +14,7 @@
 
 .marca {
   color: var(--cor-texto);
+  font-family: var(--fonte-titulo), Georgia, serif;
   font-size: 1.25rem;
   font-weight: 700;
   text-decoration: none;
