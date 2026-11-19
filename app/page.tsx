@@ -6,9 +6,10 @@ import estilos from "./page.module.css";
 
 async function ListaDeNoticias() {
   const noticias = (await sql`
-    SELECT id, titulo, resumo, minutos
+    SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
     FROM noticias
-    ORDER BY id DESC
+    JOIN categorias ON categorias.id = noticias.categoria_id
+    ORDER BY noticias.id DESC
   `) as Noticia[];
 
   return (
@@ -18,6 +19,7 @@ async function ListaDeNoticias() {
         {noticias.map((noticia) => (
           <Manchete
             key={noticia.id}
+            categoria={noticia.categoria}
             titulo={noticia.titulo}
             resumo={noticia.resumo}
             minutos={noticia.minutos}
