@@ -1,0 +1,5 @@
+CREATE TABLE categorias (
+  id SERIAL PRIMARY KEY,
+  nome TEXT NOT NULL UNIQUE,
+  criada_em TIMESTAMPTZ NOT NULL DEFAULT now()
+);
