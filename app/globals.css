@@ -1,0 +1,28 @@
+:root {
+  --cor-fundo: #f6f7f9;
+  --cor-superficie: #ffffff;
+  --cor-texto: #1c1f26;
+  --cor-texto-suave: #5b6472;
+  --cor-destaque: #c8102e;
+  --cor-borda: #e2e5ea;
+
+  --espaco-1: 0.5rem;
+  --espaco-2: 1rem;
+  --espaco-3: 1.5rem;
+  --espaco-4: 2.5rem;
+
+  --largura-maxima: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
