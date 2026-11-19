@@ -7,7 +7,3 @@ export type NoticiaResumida = Pick<
 > & {
   categoria: string;
 };
-
-// ou deu certo e vêm as notícias, ou deu errado e vem a mensagem: nunca os dois
-export type ResultadoDaBusca =
-  { ok: true; noticias: NoticiaResumida[] } | { ok: false; erro: string };

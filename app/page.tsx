@@ -2,15 +2,22 @@ import { Suspense } from "react";
 import Manchete from "./componentes/Manchete";
 import type { NoticiaResumida } from "./dados/noticias";
 import { sql } from "./lib/db";
+import { tentar } from "./lib/resultado";
 import estilos from "./page.module.css";
 
 async function ListaDeNoticias() {
-  const noticias = (await sql`
-    SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
-    FROM noticias
-    JOIN categorias ON categorias.id = noticias.categoria_id
-    ORDER BY noticias.id DESC
-  `) as NoticiaResumida[];
+  const resultado = await tentar(
+    async () =>
+      (await sql`
+        SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
+        FROM noticias
+        JOIN categorias ON categorias.id = noticias.categoria_id
+        ORDER BY noticias.id DESC
+      `) as NoticiaResumida[],
+    "Não foi possível carregar as notícias agora.",
+  );
+  if (!resultado.ok) return <p>{resultado.erro}</p>;
+  const noticias = resultado.dados;
 
   return (
     <>
