@@ -11,10 +11,11 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
 
   // o texto da pessoa vai separado do comando: o banco nunca trata ele como SQL
   const noticias = (await sql`
-    SELECT id, titulo, resumo, minutos
+    SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
     FROM noticias
+    JOIN categorias ON categorias.id = noticias.categoria_id
     WHERE titulo ILIKE ${"%" + termo + "%"}
-    ORDER BY id DESC
+    ORDER BY noticias.id DESC
   `) as Noticia[];
 
   if (noticias.length === 0) return <p>Nenhuma notícia encontrada.</p>;
@@ -24,6 +25,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
       {noticias.map((noticia) => (
         <Manchete
           key={noticia.id}
+          categoria={noticia.categoria}
           titulo={noticia.titulo}
           resumo={noticia.resumo}
           minutos={noticia.minutos}
