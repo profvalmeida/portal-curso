@@ -8,7 +8,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--fonte-texto" });
 const lora = Lora({ subsets: ["latin"], variable: "--fonte-titulo" });
 
 export const metadata: Metadata = {
-  title: "Portal de Notícias",
+  title: {
+    default: "Portal de Notícias",
+    template: "%s | Portal de Notícias",
+  },
   description: "As notícias do dia, feitas com Next.js",
 };
 

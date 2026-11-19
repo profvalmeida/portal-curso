@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import estilos from "./page.module.css";
+
+export const metadata: Metadata = {
+  title: "Sobre",
+  description: "Conheça o portal e a equipe que escreve as notícias.",
+};
 
 export default function Sobre() {
   return (
