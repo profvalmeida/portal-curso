@@ -9,12 +9,13 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
   const termo = typeof q === "string" ? q : "";
   if (!termo) return null;
 
-  // PERIGO: o texto da pessoa entra direto no meio do SQL
-  const noticias = (await sql.query(
-    "SELECT id, titulo, resumo, minutos FROM noticias WHERE titulo ILIKE '%" +
-      termo +
-      "%' ORDER BY id DESC",
-  )) as Noticia[];
+  // o texto da pessoa vai separado do comando: o banco nunca trata ele como SQL
+  const noticias = (await sql`
+    SELECT id, titulo, resumo, minutos
+    FROM noticias
+    WHERE titulo ILIKE ${"%" + termo + "%"}
+    ORDER BY id DESC
+  `) as Noticia[];
 
   if (noticias.length === 0) return <p>Nenhuma notícia encontrada.</p>;
 
