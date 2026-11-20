@@ -1,0 +1,32 @@
+import "server-only";
+import { createHash, randomBytes } from "node:crypto";
+import { cookies } from "next/headers";
+import { sql } from "./db";
+
+export const COOKIE_DA_SESSAO = "sessao";
+const SETE_DIAS = 7 * 24 * 60 * 60 * 1000;
+
+// o que vai pro banco é o hash do token, nunca o token
+function hashDoToken(token: string) {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+// cria a sessão no banco e manda o token pro navegador, num cookie
+export async function criarSessao(usuarioId: number) {
+  const token = randomBytes(32).toString("base64url");
+  const expiraEm = new Date(Date.now() + SETE_DIAS);
+
+  await sql`
+    INSERT INTO sessoes (id, usuario_id, expira_em)
+    VALUES (${hashDoToken(token)}, ${usuarioId}, ${expiraEm})
+  `;
+
+  const cookiesDaResposta = await cookies();
+  cookiesDaResposta.set(COOKIE_DA_SESSAO, token, {
+    httpOnly: true, // o JavaScript da página não consegue ler
+    secure: process.env.NODE_ENV === "production", // no site publicado, só por HTTPS
+    sameSite: "lax", // outro site não consegue usar
+    expires: expiraEm,
+    path: "/",
+  });
+}

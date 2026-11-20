@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import estilos from "../../formulario.module.css";
 
@@ -13,6 +14,9 @@ export default function Pronto(props: PageProps<"/cadastro/pronto">) {
         <Mensagem {...props} />
       </Suspense>
       <p>A sua conta foi criada.</p>
+      <p>
+        Agora é só <Link href="/entrar">entrar</Link>.
+      </p>
     </main>
   );
 }
