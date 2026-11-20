@@ -1,0 +1,40 @@
+/* o visual dos formulários do portal (cadastro e login) */
+.pagina {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  margin-top: var(--espaco-3);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.campo input {
+  font: inherit;
+  font-weight: 400;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  background: var(--cor-superficie);
+}
+
+.botao {
+  margin-top: var(--espaco-1);
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 0;
+  border-radius: 8px;
+  background: var(--cor-destaque);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
