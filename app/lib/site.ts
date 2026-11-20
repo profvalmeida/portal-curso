@@ -1,6 +1,7 @@
 type ConfigDoSite = {
   nome: string;
   descricao: string;
+  porPagina: number;
   menu: readonly { rotulo: string; href: string }[];
 };
 
@@ -8,6 +9,7 @@ type ConfigDoSite = {
 export const site = {
   nome: "Portal de Notícias",
   descricao: "As notícias do dia, feitas com Next.js",
+  porPagina: 4,
   menu: [
     { rotulo: "Início", href: "/" },
     { rotulo: "Sobre", href: "/sobre" },

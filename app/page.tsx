@@ -3,15 +3,21 @@ import Manchete from "./componentes/Manchete";
 import { listarManchetes } from "./dados/noticias";
 import estilos from "./page.module.css";
 
-async function ListaDeNoticias() {
-  const resultado = await listarManchetes();
+async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
+  const { pagina: valor } = await searchParams;
+  // ?pagina=2 chega como texto: vira número, e qualquer coisa estranha vira 1
+  const pagina = Math.max(1, Number(valor) || 1);
+
+  const resultado = await listarManchetes(pagina);
   if (!resultado.ok) return <p>{resultado.erro}</p>;
-  const noticias = resultado.dados;
-  const [principal, ...outras] = noticias;
+  const { noticias } = resultado.dados;
+  // só a primeira página tem a manchete em destaque
+  const principal = pagina === 1 ? noticias[0] : undefined;
+  const outras = pagina === 1 ? noticias.slice(1) : noticias;
 
   return (
     <>
-      <p>Temos {noticias.length} notícias hoje.</p>
+      {noticias.length === 0 && <p>Não tem mais notícias por aqui.</p>}
       <section className={estilos.grade}>
         {principal && (
           <Manchete
@@ -40,14 +46,14 @@ async function ListaDeNoticias() {
   );
 }
 
-export default function Home() {
+export default function Home(props: PageProps<"/">) {
   const nome = "Portal de Notícias";
 
   return (
     <main>
       <h1>{nome}</h1>
       <Suspense fallback={<p>Carregando as notícias…</p>}>
-        <ListaDeNoticias />
+        <ListaDeNoticias {...props} />
       </Suspense>
     </main>
   );
