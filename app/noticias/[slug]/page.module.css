@@ -1,0 +1,38 @@
+.artigo {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.categoria {
+  color: var(--cor-destaque);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-size: 2.6rem;
+  line-height: 1.15;
+  margin-top: var(--espaco-1);
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+  font-size: 1.25rem;
+  margin-top: var(--espaco-2);
+}
+
+.detalhes {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--cor-borda);
+  padding: var(--espaco-2) 0;
+  margin-bottom: var(--espaco-3);
+}
+
+.paragrafo {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  margin-bottom: var(--espaco-2);
+}
