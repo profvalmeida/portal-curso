@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { ehValorRepetido, sql } from "../lib/db";
 import { tentar, type Resultado } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
@@ -14,23 +15,34 @@ export type NoticiaResumida = Pick<
   categoria_slug: string;
 };
 
-// as manchetes de uma página da página inicial, das mais novas pras mais antigas
+// a página inicial em cache: o resultado fica guardado, e as próximas visitas nem vão no banco.
+// A etiqueta "noticias" deixa a gente jogar esse cache fora quando uma notícia muda
+async function manchetesEmCache(pagina: number) {
+  "use cache";
+  cacheLife("max");
+  cacheTag("noticias");
+  // pede uma a mais que o tamanho da página: se ela vier, existe uma próxima página
+  const noticias = (await sql`
+    SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+      categorias.slug AS categoria_slug, titulo, resumo, minutos
+    FROM noticias
+    JOIN categorias ON categorias.id = noticias.categoria_id
+    WHERE situacao = 'publicada'
+    ORDER BY noticias.id DESC
+    LIMIT ${site.porPagina + 1}
+    OFFSET ${(pagina - 1) * site.porPagina}
+  `) as NoticiaResumida[];
+  const temProxima = noticias.length > site.porPagina;
+  return { noticias: noticias.slice(0, site.porPagina), temProxima };
+}
+
+// as manchetes de uma página da página inicial, das mais novas pras mais antigas.
+// O tentar fica de fora do cache: o que vai pro cache são só os dados
 export function listarManchetes(pagina: number) {
-  return tentar(async () => {
-    // pede uma a mais que o tamanho da página: se ela vier, existe uma próxima página
-    const noticias = (await sql`
-      SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
-        categorias.slug AS categoria_slug, titulo, resumo, minutos
-      FROM noticias
-      JOIN categorias ON categorias.id = noticias.categoria_id
-      WHERE situacao = 'publicada'
-      ORDER BY noticias.id DESC
-      LIMIT ${site.porPagina + 1}
-      OFFSET ${(pagina - 1) * site.porPagina}
-    `) as NoticiaResumida[];
-    const temProxima = noticias.length > site.porPagina;
-    return { noticias: noticias.slice(0, site.porPagina), temProxima };
-  }, "Não foi possível carregar as notícias agora.");
+  return tentar(
+    () => manchetesEmCache(pagina),
+    "Não foi possível carregar as notícias agora.",
+  );
 }
 
 // as manchetes cujo título tem o termo (o termo vai como parâmetro)
