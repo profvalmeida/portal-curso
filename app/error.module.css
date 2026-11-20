@@ -1,0 +1,21 @@
+.pagina {
+  text-align: center;
+  padding-top: 15vh;
+}
+
+.texto {
+  color: var(--cor-texto-suave);
+  margin-top: var(--espaco-1);
+}
+
+.botao {
+  margin-top: var(--espaco-4);
+  padding: var(--espaco-1) var(--espaco-3);
+  border: 0;
+  border-radius: 8px;
+  background: var(--cor-destaque);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

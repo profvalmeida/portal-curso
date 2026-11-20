@@ -6,8 +6,8 @@ export default async function PaginaDaNoticia({
   params,
 }: PageProps<"/noticias/[slug]">) {
   const { slug } = await params;
-  // só pra testar o carregando: finge que o banco demorou 15 segundos
-  await new Promise((pronto) => setTimeout(pronto, 15000));
+  // só pra testar a página de erro: um erro de propósito
+  if (slug) throw new Error("Erro de teste");
   const resultado = await buscarNoticia(slug);
   if (!resultado.ok) return <p>{resultado.erro}</p>;
 
