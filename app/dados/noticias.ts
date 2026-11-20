@@ -178,14 +178,15 @@ export type NoticiaParaEditar = Pick<
   "id" | "titulo" | "resumo" | "conteudo" | "categoria_id"
 >;
 
-// uma notícia pelo id, pra editar (ou null, se não existir)
+// uma notícia de quem está logado, pelo id, pra editar (ou null, se não existir ou se
+// for de outra pessoa: pra quem pediu, dá na mesma)
 export async function buscarNoticiaParaEditar(id: number) {
-  await exigirLogin();
+  const usuario = await exigirLogin();
   return tentar(async () => {
     const [noticia] = (await sql`
       SELECT id, titulo, resumo, conteudo, categoria_id
       FROM noticias
-      WHERE id = ${id}
+      WHERE id = ${id} AND autor_id = ${usuario.id}
     `) as NoticiaParaEditar[];
     return noticia ?? null;
   }, "Não foi possível carregar a notícia agora.");
@@ -196,15 +197,20 @@ export async function atualizarNoticia(
   id: number,
   dados: DadosDaNoticia,
 ): Promise<Resultado<null>> {
-  await exigirLogin();
+  const usuario = await exigirLogin();
   try {
-    await sql`
+    // o RETURNING devolve as linhas que mudaram: nenhuma = não achou uma notícia dele
+    const linhas = await sql`
       UPDATE noticias
       SET titulo = ${dados.titulo}, resumo = ${dados.resumo},
         conteudo = ${dados.conteudo}, minutos = ${minutosDeLeitura(dados.conteudo)},
         categoria_id = ${dados.categoria_id}, situacao = ${dados.situacao}
-      WHERE id = ${id}
+      WHERE id = ${id} AND autor_id = ${usuario.id}
+      RETURNING id
     `;
+    if (linhas.length === 0) {
+      return { ok: false, erro: "Essa notícia não existe." };
+    }
     return { ok: true, dados: null };
   } catch (erro) {
     return tituloRepetido(erro);
@@ -213,6 +219,8 @@ export async function atualizarNoticia(
 
 // apaga uma notícia de vez (não tem lixeira: o DELETE não volta atrás)
 export async function excluirNoticia(id: number) {
-  await exigirLogin();
-  await sql`DELETE FROM noticias WHERE id = ${id}`;
+  const usuario = await exigirLogin();
+  await sql`
+    DELETE FROM noticias WHERE id = ${id} AND autor_id = ${usuario.id}
+  `;
 }
