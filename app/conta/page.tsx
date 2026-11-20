@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import estilos from "../formulario.module.css";
-import { usuarioLogado } from "../lib/sessao";
-import { sair } from "./acoes";
+import { contarSessoes, usuarioLogado } from "../lib/sessao";
+import { sair, sairDeTodos } from "./acoes";
 
 export const metadata: Metadata = {
   title: "Minha conta",
@@ -20,14 +20,22 @@ async function DadosDaConta() {
     );
   }
 
+  const sessoes = await contarSessoes(usuario.id);
+
   return (
     <>
       <p>
         Olá, <strong>{usuario.nome}</strong>!
       </p>
       <p>Você entrou com o e-mail {usuario.email}.</p>
+      <p>Sessões abertas: {sessoes}</p>
       <form action={sair}>
         <button className={estilos.botao}>Sair</button>
+      </form>
+      <form action={sairDeTodos}>
+        <button className={estilos.botaoSecundario}>
+          Sair de todos os aparelhos
+        </button>
       </form>
     </>
   );

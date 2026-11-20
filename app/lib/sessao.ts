@@ -17,6 +17,9 @@ export async function criarSessao(usuarioId: number) {
   const token = randomBytes(32).toString("base64url");
   const expiraEm = new Date(Date.now() + SETE_DIAS);
 
+  // aproveita o login pra jogar fora as sessões que já venceram
+  await sql`DELETE FROM sessoes WHERE expira_em < now()`;
+
   await sql`
     INSERT INTO sessoes (id, usuario_id, expira_em)
     VALUES (${hashDoToken(token)}, ${usuarioId}, ${expiraEm})
@@ -57,4 +60,20 @@ export async function encerrarSessao() {
     await sql`DELETE FROM sessoes WHERE id = ${hashDoToken(token)}`;
   }
   cookiesDoPedido.delete(COOKIE_DA_SESSAO);
+}
+
+// quantas sessões abertas (que ainda valem) o usuário tem
+export async function contarSessoes(usuarioId: number) {
+  const [{ total }] = (await sql`
+    SELECT count(*)::int AS total
+    FROM sessoes
+    WHERE usuario_id = ${usuarioId} AND expira_em > now()
+  `) as { total: number }[];
+  return total;
+}
+
+// sair de todos os aparelhos: apaga todas as sessões do usuário, e o cookie deste navegador
+export async function encerrarTodasAsSessoes(usuarioId: number) {
+  await sql`DELETE FROM sessoes WHERE usuario_id = ${usuarioId}`;
+  (await cookies()).delete(COOKIE_DA_SESSAO);
 }

@@ -49,3 +49,14 @@
   font-size: 0.9rem;
   font-weight: 400;
 }
+
+.botaoSecundario {
+  margin-top: var(--espaco-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
