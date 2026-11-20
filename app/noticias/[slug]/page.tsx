@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import BotaoCompartilhar from "../../componentes/BotaoCompartilhar";
 import { buscarNoticia } from "../../dados/noticias";
 import estilos from "./page.module.css";
 
@@ -24,6 +25,7 @@ export default async function PaginaDaNoticia({
         <p className={estilos.detalhes}>
           Por {noticia.autor} · {data} · {noticia.minutos} min de leitura
         </p>
+        <BotaoCompartilhar />
         {paragrafos.map((paragrafo, i) => (
           <p key={i} className={estilos.paragrafo}>
             {paragrafo}
