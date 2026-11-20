@@ -30,6 +30,7 @@ async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
             titulo={principal.titulo}
             resumo={principal.resumo}
             minutos={principal.minutos}
+            foto={principal.foto}
           />
         )}
         {outras.map((noticia) => (
@@ -41,6 +42,7 @@ async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
             titulo={noticia.titulo}
             resumo={noticia.resumo}
             minutos={noticia.minutos}
+            foto={noticia.foto}
           />
         ))}
       </section>

@@ -28,6 +28,7 @@ async function Categoria({ params }: PageProps<"/categorias/[slug]">) {
             titulo={noticia.titulo}
             resumo={noticia.resumo}
             minutos={noticia.minutos}
+            foto={noticia.foto}
           />
         ))}
       </section>

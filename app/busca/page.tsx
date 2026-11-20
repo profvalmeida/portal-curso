@@ -23,6 +23,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
           titulo={noticia.titulo}
           resumo={noticia.resumo}
           minutos={noticia.minutos}
+          foto={noticia.foto}
         />
       ))}
     </section>
