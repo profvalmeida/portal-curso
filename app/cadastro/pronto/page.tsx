@@ -12,7 +12,7 @@ export default function Pronto(props: PageProps<"/cadastro/pronto">) {
       <Suspense fallback={<h1>Oi!</h1>}>
         <Mensagem {...props} />
       </Suspense>
-      <p>Os seus dados chegaram ao servidor.</p>
+      <p>A sua conta foi criada.</p>
     </main>
   );
 }
