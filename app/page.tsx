@@ -7,12 +7,22 @@ async function ListaDeNoticias() {
   const resultado = await listarManchetes();
   if (!resultado.ok) return <p>{resultado.erro}</p>;
   const noticias = resultado.dados;
+  const [principal, ...outras] = noticias;
 
   return (
     <>
       <p>Temos {noticias.length} notícias hoje.</p>
       <section className={estilos.grade}>
-        {noticias.map((noticia) => (
+        {principal && (
+          <Manchete
+            destaque
+            categoria={principal.categoria}
+            titulo={principal.titulo}
+            resumo={principal.resumo}
+            minutos={principal.minutos}
+          />
+        )}
+        {outras.map((noticia) => (
           <Manchete
             key={noticia.id}
             categoria={noticia.categoria}

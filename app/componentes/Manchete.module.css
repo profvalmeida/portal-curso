@@ -32,3 +32,19 @@
   margin-top: auto;
   padding-top: var(--espaco-2);
 }
+
+/* a notícia principal: ocupa a largura toda da grade, com letra maior */
+.destaque {
+  grid-column: 1 / -1;
+  padding: var(--espaco-4);
+  border-top: 4px solid var(--cor-destaque);
+}
+
+.destaque .titulo {
+  font-size: 2.25rem;
+  line-height: 1.15;
+}
+
+.destaque .resumo {
+  font-size: 1.15rem;
+}

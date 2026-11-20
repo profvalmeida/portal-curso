@@ -5,6 +5,7 @@ type Props = {
   titulo: string;
   resumo: string;
   minutos: number;
+  destaque?: boolean;
 };
 
 export default function Manchete({
@@ -12,9 +13,14 @@ export default function Manchete({
   titulo,
   resumo,
   minutos,
+  destaque = false,
 }: Props) {
+  const classe = destaque
+    ? `${estilos.manchete} ${estilos.destaque}`
+    : estilos.manchete;
+
   return (
-    <article className={estilos.manchete}>
+    <article className={classe}>
       <span className={estilos.categoria}>{categoria}</span>
       <h2 className={estilos.titulo}>{titulo}</h2>
       <p className={estilos.resumo}>{resumo}</p>
