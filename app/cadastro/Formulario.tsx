@@ -13,7 +13,7 @@ export default function Formulario() {
   const valores = estado.situacao === "erro" ? estado.valores : undefined;
 
   return (
-    <form action={enviar} className={estilos.formulario}>
+    <form action={enviar} className={estilos.formulario} noValidate>
       <label className={estilos.campo}>
         Nome
         <input name="nome" required defaultValue={valores?.nome} />
