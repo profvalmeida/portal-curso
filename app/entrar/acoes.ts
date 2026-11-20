@@ -29,5 +29,5 @@ export async function entrar(
   }
 
   await criarSessao(usuario.id);
-  redirect("/");
+  redirect("/conta");
 }

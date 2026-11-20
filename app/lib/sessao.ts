@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
+import type { Usuario } from "../dados/tipos";
 import { sql } from "./db";
 
 export const COOKIE_DA_SESSAO = "sessao";
@@ -29,4 +30,21 @@ export async function criarSessao(usuarioId: number) {
     expires: expiraEm,
     path: "/",
   });
+}
+
+// o que o site pode saber sobre quem está logado (sem o hash da senha)
+export type UsuarioLogado = Pick<Usuario, "id" | "nome" | "email">;
+
+// quem está logado, ou null: lê o cookie, procura a sessão que ainda vale, e o dono dela
+export async function usuarioLogado() {
+  const token = (await cookies()).get(COOKIE_DA_SESSAO)?.value;
+  if (!token) return null;
+
+  const [usuario] = (await sql`
+    SELECT usuarios.id, usuarios.nome, usuarios.email
+    FROM sessoes
+    JOIN usuarios ON usuarios.id = sessoes.usuario_id
+    WHERE sessoes.id = ${hashDoToken(token)} AND sessoes.expira_em > now()
+  `) as UsuarioLogado[];
+  return usuario ?? null;
 }
