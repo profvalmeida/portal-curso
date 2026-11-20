@@ -10,6 +10,7 @@ export default function LayoutDoPainel({ children }: LayoutProps<"/painel">) {
         <p className={estilos.titulo}>Painel do autor</p>
         <nav className={estilos.menu}>
           <Link href="/painel">Minhas notícias</Link>
+          <Link href="/painel/nova">Nova notícia</Link>
         </nav>
       </aside>
       <section>{children}</section>

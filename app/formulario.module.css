@@ -18,7 +18,9 @@
   font-weight: 600;
 }
 
-.campo input {
+.campo input,
+.campo select,
+.campo textarea {
   font: inherit;
   font-weight: 400;
   padding: var(--espaco-1) var(--espaco-2);

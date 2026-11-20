@@ -3,7 +3,7 @@ import { sql } from "../lib/db";
 import { tentar } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
 import { site } from "../lib/site";
-import type { Categoria, Noticia } from "./tipos";
+import type { Categoria, NovaNoticia, Noticia } from "./tipos";
 
 // o que a manchete mostra: alguns campos da notícia, mais o nome da categoria
 export type NoticiaResumida = Pick<
@@ -129,4 +129,23 @@ export async function listarMinhasNoticias() {
       `) as NoticiaDoPainel[],
     "Não foi possível carregar as suas notícias agora.",
   );
+}
+
+// o que o autor preenche no formulário (quem é o autor e os minutos, o servidor descobre)
+export type DadosDaNoticia = Omit<NovaNoticia, "autor_id" | "minutos">;
+
+// o tempo de leitura: umas 200 palavras por minuto, e nunca menos de 1 minuto
+function minutosDeLeitura(conteudo: string) {
+  const palavras = conteudo.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(palavras / 200));
+}
+
+// cria uma notícia de quem está logado: o autor vem da sessão, nunca do formulário
+export async function criarNoticia(dados: DadosDaNoticia) {
+  const usuario = await exigirLogin();
+  await sql`
+    INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id)
+    VALUES (${dados.titulo}, ${dados.resumo}, ${dados.conteudo},
+      ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id}, ${usuario.id})
+  `;
 }
