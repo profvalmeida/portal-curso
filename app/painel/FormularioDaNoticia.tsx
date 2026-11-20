@@ -3,19 +3,30 @@
 import { useActionState } from "react";
 import type { CategoriaParaEscolher } from "../dados/categorias";
 import estilos from "../formulario.module.css";
-import { criar, type EstadoDaNoticia } from "./acoes";
+import type { EstadoDaNoticia, ValoresDaNoticia } from "./acoes";
 
 type Props = {
   categorias: CategoriaParaEscolher[];
+  // quem recebe o formulário: a action de criar, ou a de editar
+  acao: (estado: EstadoDaNoticia, dados: FormData) => Promise<EstadoDaNoticia>;
+  // o que já vem preenchido (na hora de editar)
+  inicio?: ValoresDaNoticia;
+  botao: string;
 };
 
 const inicial: EstadoDaNoticia = { situacao: "preenchendo" };
 
-// o formulário da notícia: hoje ele cria, e mais pra frente o mesmo formulário vai editar
-export default function FormularioDaNoticia({ categorias }: Props) {
-  const [estado, enviar, enviando] = useActionState(criar, inicial);
+// o formulário da notícia: o mesmo pra criar e pra editar
+export default function FormularioDaNoticia({
+  categorias,
+  acao,
+  inicio,
+  botao,
+}: Props) {
+  const [estado, enviar, enviando] = useActionState(acao, inicial);
   const erros = estado.situacao === "erro" ? estado.erros : {};
-  const valores = estado.situacao === "erro" ? estado.valores : undefined;
+  // depois de um erro, o que a pessoa escreveu; antes, o que veio preenchido
+  const valores = estado.situacao === "erro" ? estado.valores : inicio;
 
   return (
     <form action={enviar} className={estilos.formulario} noValidate>
@@ -63,7 +74,7 @@ export default function FormularioDaNoticia({ categorias }: Props) {
         )}
       </label>
       <button className={estilos.botao} disabled={enviando}>
-        {enviando ? "Publicando…" : "Publicar"}
+        {enviando ? "Salvando…" : botao}
       </button>
     </form>
   );

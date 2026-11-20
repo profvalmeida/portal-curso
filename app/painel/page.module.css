@@ -23,8 +23,14 @@
 }
 
 .data {
+  margin-left: auto;
   color: var(--cor-texto-suave);
   white-space: nowrap;
+}
+
+.item .acao {
+  color: var(--cor-destaque);
+  font-weight: 400;
 }
 
 .vazio {

@@ -1,10 +1,15 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { criarNoticia } from "../dados/noticias";
+import {
+  atualizarNoticia,
+  criarNoticia,
+  type DadosDaNoticia,
+} from "../dados/noticias";
 import { campoDeTexto } from "../lib/validacao";
 
 type Campo = "titulo" | "resumo" | "categoria" | "conteudo";
+export type ValoresDaNoticia = Record<Campo, string>;
 
 // o que o formulário mostra: ou está preenchendo, ou deu erro (com o que a pessoa já escreveu)
 export type EstadoDaNoticia =
@@ -12,15 +17,12 @@ export type EstadoDaNoticia =
   | {
       situacao: "erro";
       erros: Partial<Record<Campo, string>>;
-      valores: Record<Campo, string>;
+      valores: ValoresDaNoticia;
     };
 
-// recebe o formulário da notícia nova (com o useActionState: o estado anterior, e os dados)
-export async function criar(
-  estado: EstadoDaNoticia,
-  dados: FormData,
-): Promise<EstadoDaNoticia> {
-  const valores = {
+// lê e confere os campos do formulário: vale pra criar e pra editar
+function conferir(dados: FormData) {
+  const valores: ValoresDaNoticia = {
     titulo: campoDeTexto(dados, "titulo"),
     resumo: campoDeTexto(dados, "resumo"),
     categoria: campoDeTexto(dados, "categoria"),
@@ -38,16 +40,45 @@ export async function criar(
     erros.categoria = "Escolha uma categoria.";
   if (valores.conteudo.length < 20)
     erros.conteudo = "O texto precisa ter pelo menos 20 letras.";
-  if (Object.keys(erros).length > 0) {
-    return { situacao: "erro", erros, valores };
-  }
 
-  const resultado = await criarNoticia({
+  const noticia: DadosDaNoticia = {
     titulo: valores.titulo,
     resumo: valores.resumo,
     conteudo: valores.conteudo,
     categoria_id: categoriaId,
-  });
+  };
+  return { valores, erros, noticia };
+}
+
+// recebe o formulário da notícia nova (com o useActionState: o estado anterior, e os dados)
+export async function criar(
+  estado: EstadoDaNoticia,
+  dados: FormData,
+): Promise<EstadoDaNoticia> {
+  const { valores, erros, noticia } = conferir(dados);
+  if (Object.keys(erros).length > 0) {
+    return { situacao: "erro", erros, valores };
+  }
+
+  const resultado = await criarNoticia(noticia);
+  if (!resultado.ok) {
+    return { situacao: "erro", erros: { titulo: resultado.erro }, valores };
+  }
+  redirect("/painel");
+}
+
+// recebe o formulário de editar. O id vem antes, do bind: editar.bind(null, id)
+export async function editar(
+  id: number,
+  estado: EstadoDaNoticia,
+  dados: FormData,
+): Promise<EstadoDaNoticia> {
+  const { valores, erros, noticia } = conferir(dados);
+  if (Object.keys(erros).length > 0) {
+    return { situacao: "erro", erros, valores };
+  }
+
+  const resultado = await atualizarNoticia(id, noticia);
   if (!resultado.ok) {
     return { situacao: "erro", erros: { titulo: resultado.erro }, valores };
   }

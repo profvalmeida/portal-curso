@@ -28,6 +28,9 @@ async function MinhasNoticias() {
           <span className={estilos.data}>
             {noticia.publicada_em.toLocaleDateString("pt-BR")}
           </span>
+          <Link href={`/painel/${noticia.id}/editar`} className={estilos.acao}>
+            Editar
+          </Link>
         </li>
       ))}
     </ul>

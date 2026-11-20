@@ -140,6 +140,17 @@ function minutosDeLeitura(conteudo: string) {
   return Math.max(1, Math.round(palavras / 200));
 }
 
+// o slug é UNIQUE: um título que vira um endereço que já existe é recusado pelo banco
+function tituloRepetido(erro: unknown): Resultado<null> {
+  if (ehValorRepetido(erro)) {
+    return {
+      ok: false,
+      erro: "Já existe uma notícia com um título igual a esse.",
+    };
+  }
+  throw erro;
+}
+
 // cria uma notícia de quem está logado: o autor vem da sessão, nunca do formulário
 export async function criarNoticia(
   dados: DadosDaNoticia,
@@ -153,13 +164,45 @@ export async function criarNoticia(
     `;
     return { ok: true, dados: null };
   } catch (erro) {
-    // o slug é UNIQUE: dois títulos que viram o mesmo endereço não podem existir
-    if (ehValorRepetido(erro)) {
-      return {
-        ok: false,
-        erro: "Já existe uma notícia com um título igual a esse.",
-      };
-    }
-    throw erro;
+    return tituloRepetido(erro);
+  }
+}
+
+// o que o formulário de editar precisa saber da notícia
+export type NoticiaParaEditar = Pick<
+  Noticia,
+  "id" | "titulo" | "resumo" | "conteudo" | "categoria_id"
+>;
+
+// uma notícia pelo id, pra editar (ou null, se não existir)
+export async function buscarNoticiaParaEditar(id: number) {
+  await exigirLogin();
+  return tentar(async () => {
+    const [noticia] = (await sql`
+      SELECT id, titulo, resumo, conteudo, categoria_id
+      FROM noticias
+      WHERE id = ${id}
+    `) as NoticiaParaEditar[];
+    return noticia ?? null;
+  }, "Não foi possível carregar a notícia agora.");
+}
+
+// grava as mudanças de uma notícia (o slug muda sozinho, junto com o título)
+export async function atualizarNoticia(
+  id: number,
+  dados: DadosDaNoticia,
+): Promise<Resultado<null>> {
+  await exigirLogin();
+  try {
+    await sql`
+      UPDATE noticias
+      SET titulo = ${dados.titulo}, resumo = ${dados.resumo},
+        conteudo = ${dados.conteudo}, minutos = ${minutosDeLeitura(dados.conteudo)},
+        categoria_id = ${dados.categoria_id}
+      WHERE id = ${id}
+    `;
+    return { ok: true, dados: null };
+  } catch (erro) {
+    return tituloRepetido(erro);
   }
 }
