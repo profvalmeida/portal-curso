@@ -29,7 +29,7 @@ async function Edicao({ params }: { params: Promise<{ id: string }> }) {
       categorias={categorias.dados}
       acao={editar.bind(null, id)}
       inicio={{ titulo, resumo, conteudo, categoria: String(categoria_id) }}
-      botao="Salvar"
+      botao="Salvar e publicar"
     />
   );
 }

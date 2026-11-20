@@ -47,6 +47,9 @@ function conferir(dados: FormData) {
     resumo: valores.resumo,
     conteudo: valores.conteudo,
     categoria_id: categoriaId,
+    // qual botão a pessoa apertou: qualquer coisa que não seja "rascunho" publica
+    situacao:
+      campoDeTexto(dados, "situacao") === "rascunho" ? "rascunho" : "publicada",
   };
   return { valores, erros, noticia };
 }

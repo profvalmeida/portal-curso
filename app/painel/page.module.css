@@ -22,6 +22,21 @@
   text-decoration: none;
 }
 
+.rascunho {
+  color: var(--cor-texto-suave);
+  font-weight: 600;
+}
+
+.rascunho small {
+  margin-left: var(--espaco-1);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--cor-borda);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 .data {
   margin-left: auto;
   color: var(--cor-texto-suave);

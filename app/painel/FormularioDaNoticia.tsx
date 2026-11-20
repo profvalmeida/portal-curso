@@ -73,8 +73,22 @@ export default function FormularioDaNoticia({
           <span className={estilos.erro}>{erros.conteudo}</span>
         )}
       </label>
-      <button className={estilos.botao} disabled={enviando}>
+      {/* dois botões com o mesmo name: o valor que chega é o do botão apertado */}
+      <button
+        name="situacao"
+        value="publicada"
+        className={estilos.botao}
+        disabled={enviando}
+      >
         {enviando ? "Salvando…" : botao}
+      </button>
+      <button
+        name="situacao"
+        value="rascunho"
+        className={estilos.botaoSecundario}
+        disabled={enviando}
+      >
+        Guardar como rascunho
       </button>
     </form>
   );

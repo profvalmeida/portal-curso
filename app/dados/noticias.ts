@@ -23,6 +23,7 @@ export function listarManchetes(pagina: number) {
         categorias.slug AS categoria_slug, titulo, resumo, minutos
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id
+      WHERE situacao = 'publicada'
       ORDER BY noticias.id DESC
       LIMIT ${site.porPagina + 1}
       OFFSET ${(pagina - 1) * site.porPagina}
@@ -42,7 +43,7 @@ export function buscarManchetes(termo: string) {
           titulo, resumo, minutos
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
-        WHERE titulo ILIKE ${"%" + termo + "%"}
+        WHERE situacao = 'publicada' AND titulo ILIKE ${"%" + termo + "%"}
         ORDER BY noticias.id DESC
       `) as NoticiaResumida[],
     "Não foi possível buscar as notícias agora.",
@@ -62,7 +63,7 @@ export function listarManchetesDaCategoria(slug: string) {
         categorias.slug AS categoria_slug, titulo, resumo, minutos
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id
-      WHERE categorias.slug = ${slug}
+      WHERE situacao = 'publicada' AND categorias.slug = ${slug}
       ORDER BY noticias.id DESC
     `) as NoticiaResumida[];
     return { nome: categoria.nome, noticias };
@@ -78,6 +79,7 @@ export function listarMaisLidas() {
       (await sql`
         SELECT slug, titulo
         FROM noticias
+        WHERE situacao = 'publicada'
         ORDER BY visualizacoes DESC
         LIMIT 3
       `) as MaisLida[],
@@ -103,7 +105,7 @@ export function buscarNoticia(slug: string) {
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id
       JOIN usuarios ON usuarios.id = noticias.autor_id
-      WHERE noticias.slug = ${slug}
+      WHERE noticias.slug = ${slug} AND situacao = 'publicada'
     `) as NoticiaCompleta[];
     return noticia ?? null;
   }, "Não foi possível carregar a notícia agora.");
@@ -112,7 +114,7 @@ export function buscarNoticia(slug: string) {
 // o que a lista do painel mostra
 export type NoticiaDoPainel = Pick<
   Noticia,
-  "id" | "slug" | "titulo" | "publicada_em"
+  "id" | "slug" | "titulo" | "publicada_em" | "situacao"
 >;
 
 // as notícias de quem está logado. A checagem do login fica aqui, perto dos dados:
@@ -122,7 +124,7 @@ export async function listarMinhasNoticias() {
   return tentar(
     async () =>
       (await sql`
-        SELECT id, slug, titulo, publicada_em
+        SELECT id, slug, titulo, publicada_em, situacao
         FROM noticias
         WHERE autor_id = ${usuario.id}
         ORDER BY id DESC
@@ -158,9 +160,11 @@ export async function criarNoticia(
   const usuario = await exigirLogin();
   try {
     await sql`
-      INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id)
+      INSERT INTO noticias
+        (titulo, resumo, conteudo, minutos, categoria_id, situacao, autor_id)
       VALUES (${dados.titulo}, ${dados.resumo}, ${dados.conteudo},
-        ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id}, ${usuario.id})
+        ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id},
+        ${dados.situacao}, ${usuario.id})
     `;
     return { ok: true, dados: null };
   } catch (erro) {
@@ -198,7 +202,7 @@ export async function atualizarNoticia(
       UPDATE noticias
       SET titulo = ${dados.titulo}, resumo = ${dados.resumo},
         conteudo = ${dados.conteudo}, minutos = ${minutosDeLeitura(dados.conteudo)},
-        categoria_id = ${dados.categoria_id}
+        categoria_id = ${dados.categoria_id}, situacao = ${dados.situacao}
       WHERE id = ${id}
     `;
     return { ok: true, dados: null };

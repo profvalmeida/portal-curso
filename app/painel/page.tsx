@@ -24,7 +24,14 @@ async function MinhasNoticias() {
     <ul className={estilos.lista}>
       {noticias.map((noticia) => (
         <li key={noticia.id} className={estilos.item}>
-          <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
+          {/* o rascunho ainda não tem página no portal: só o título, e a etiqueta */}
+          {noticia.situacao === "publicada" ? (
+            <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
+          ) : (
+            <span className={estilos.rascunho}>
+              {noticia.titulo} <small>Rascunho</small>
+            </span>
+          )}
           <span className={estilos.data}>
             {noticia.publicada_em.toLocaleDateString("pt-BR")}
           </span>
