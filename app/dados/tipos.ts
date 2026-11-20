@@ -23,12 +23,16 @@ export type Noticia = {
   minutos: number;
   publicada_em: Date;
   slug: string;
+  visualizacoes: number;
   categoria_id: number;
   autor_id: number;
 };
 
 // pra cadastrar: tudo, menos o que o banco preenche sozinho
-export type NovaNoticia = Omit<Noticia, "id" | "publicada_em" | "slug">;
+export type NovaNoticia = Omit<
+  Noticia,
+  "id" | "publicada_em" | "slug" | "visualizacoes"
+>;
 
 // pra editar: qualquer campo pode mudar, e nenhum é obrigatório
 export type EdicaoDeNoticia = Partial<NovaNoticia>;
