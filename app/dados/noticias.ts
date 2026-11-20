@@ -1,6 +1,6 @@
 import "server-only";
-import { sql } from "../lib/db";
-import { tentar } from "../lib/resultado";
+import { ehValorRepetido, sql } from "../lib/db";
+import { tentar, type Resultado } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
 import { site } from "../lib/site";
 import type { Categoria, NovaNoticia, Noticia } from "./tipos";
@@ -141,11 +141,25 @@ function minutosDeLeitura(conteudo: string) {
 }
 
 // cria uma notícia de quem está logado: o autor vem da sessão, nunca do formulário
-export async function criarNoticia(dados: DadosDaNoticia) {
+export async function criarNoticia(
+  dados: DadosDaNoticia,
+): Promise<Resultado<null>> {
   const usuario = await exigirLogin();
-  await sql`
-    INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id)
-    VALUES (${dados.titulo}, ${dados.resumo}, ${dados.conteudo},
-      ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id}, ${usuario.id})
-  `;
+  try {
+    await sql`
+      INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id)
+      VALUES (${dados.titulo}, ${dados.resumo}, ${dados.conteudo},
+        ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id}, ${usuario.id})
+    `;
+    return { ok: true, dados: null };
+  } catch (erro) {
+    // o slug é UNIQUE: dois títulos que viram o mesmo endereço não podem existir
+    if (ehValorRepetido(erro)) {
+      return {
+        ok: false,
+        erro: "Já existe uma notícia com um título igual a esse.",
+      };
+    }
+    throw erro;
+  }
 }
