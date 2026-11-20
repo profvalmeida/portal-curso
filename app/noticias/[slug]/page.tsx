@@ -1,13 +1,18 @@
 import { notFound } from "next/navigation";
 import BotaoCompartilhar from "../../componentes/BotaoCompartilhar";
-import { buscarNoticia } from "../../dados/noticias";
+import MaisLidas from "../../componentes/MaisLidas";
+import { buscarNoticia, listarMaisLidas } from "../../dados/noticias";
 import estilos from "./page.module.css";
 
 export default async function PaginaDaNoticia({
   params,
 }: PageProps<"/noticias/[slug]">) {
   const { slug } = await params;
-  const resultado = await buscarNoticia(slug);
+  // as duas consultas ao mesmo tempo: uma não espera a outra
+  const [resultado, maisLidas] = await Promise.all([
+    buscarNoticia(slug),
+    listarMaisLidas(),
+  ]);
   if (!resultado.ok) return <p>{resultado.erro}</p>;
 
   const noticia = resultado.dados;
@@ -32,6 +37,7 @@ export default async function PaginaDaNoticia({
           </p>
         ))}
       </article>
+      {maisLidas.ok && <MaisLidas noticias={maisLidas.dados} />}
     </main>
   );
 }

@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import Manchete from "./componentes/Manchete";
+import MaisLidas from "./componentes/MaisLidas";
 import Paginacao from "./componentes/Paginacao";
-import { listarManchetes } from "./dados/noticias";
+import { listarManchetes, listarMaisLidas } from "./dados/noticias";
 import estilos from "./page.module.css";
 
 async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
@@ -48,12 +49,21 @@ async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
   );
 }
 
+async function BarraMaisLidas() {
+  const resultado = await listarMaisLidas();
+  if (!resultado.ok) return null;
+  return <MaisLidas noticias={resultado.dados} />;
+}
+
 export default function Home(props: PageProps<"/">) {
   const nome = "Portal de Notícias";
 
   return (
     <main>
       <h1>{nome}</h1>
+      <Suspense fallback={null}>
+        <BarraMaisLidas />
+      </Suspense>
       <Suspense fallback={<p>Carregando as notícias…</p>}>
         <ListaDeNoticias {...props} />
       </Suspense>

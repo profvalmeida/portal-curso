@@ -68,6 +68,22 @@ export function listarManchetesDaCategoria(slug: string) {
   }, "Não foi possível carregar a categoria agora.");
 }
 
+// as três notícias mais lidas do portal
+export type MaisLida = Pick<Noticia, "slug" | "titulo">;
+
+export function listarMaisLidas() {
+  return tentar(
+    async () =>
+      (await sql`
+        SELECT slug, titulo
+        FROM noticias
+        ORDER BY visualizacoes DESC
+        LIMIT 3
+      `) as MaisLida[],
+    "Não foi possível carregar as mais lidas.",
+  );
+}
+
 // tudo o que a página da notícia mostra
 export type NoticiaCompleta = Pick<
   Noticia,
