@@ -1,0 +1,28 @@
+.esqueleto {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.barra {
+  height: 18px;
+  border-radius: 6px;
+  background: var(--cor-borda);
+  animation: piscar 1.2s ease-in-out infinite;
+}
+
+.titulo {
+  height: 40px;
+}
+
+.curta {
+  width: 40%;
+}
+
+@keyframes piscar {
+  50% {
+    opacity: 0.4;
+  }
+}
