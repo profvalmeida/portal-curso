@@ -15,6 +15,13 @@ export type Usuario = {
   criado_em: Date;
 };
 
+export type Sessao = {
+  id: string;
+  usuario_id: number;
+  expira_em: Date;
+  criada_em: Date;
+};
+
 export type Noticia = {
   id: number;
   titulo: string;
