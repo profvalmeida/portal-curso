@@ -206,3 +206,9 @@ export async function atualizarNoticia(
     return tituloRepetido(erro);
   }
 }
+
+// apaga uma notícia de vez (não tem lixeira: o DELETE não volta atrás)
+export async function excluirNoticia(id: number) {
+  await exigirLogin();
+  await sql`DELETE FROM noticias WHERE id = ${id}`;
+}

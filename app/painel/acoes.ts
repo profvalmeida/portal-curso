@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import {
   atualizarNoticia,
   criarNoticia,
+  excluirNoticia,
   type DadosDaNoticia,
 } from "../dados/noticias";
 import { campoDeTexto } from "../lib/validacao";
@@ -82,5 +83,11 @@ export async function editar(
   if (!resultado.ok) {
     return { situacao: "erro", erros: { titulo: resultado.erro }, valores };
   }
+  redirect("/painel");
+}
+
+// recebe o formulário de confirmação. O id também vem do bind
+export async function excluir(id: number) {
+  await excluirNoticia(id);
   redirect("/painel");
 }

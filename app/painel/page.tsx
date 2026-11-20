@@ -31,6 +31,9 @@ async function MinhasNoticias() {
           <Link href={`/painel/${noticia.id}/editar`} className={estilos.acao}>
             Editar
           </Link>
+          <Link href={`/painel/${noticia.id}/excluir`} className={estilos.acao}>
+            Excluir
+          </Link>
         </li>
       ))}
     </ul>
