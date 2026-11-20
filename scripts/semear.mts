@@ -23,15 +23,15 @@ await sql`
 `;
 
 await sql`
-  INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id, visualizacoes)
+  INSERT INTO noticias (titulo, resumo, conteudo, minutos, categoria_id, autor_id, visualizacoes, foto)
   VALUES
-    ('Next.js ganha nova versão', 'Confira o que mudou no framework.', ${conteudo}, 4, 3, 1, 840),
-    ('Prefeitura inaugura ciclovia no centro', 'São oito quilômetros ligando os bairros à estação.', ${conteudo}, 3, 1, 1, 1920),
-    ('Feira do livro começa neste sábado', 'O evento reúne autores da região e tem entrada gratuita.', ${conteudo}, 2, 4, 1, 610),
-    ('Time da cidade vence e sobe na tabela', 'A vitória por dois a zero veio no segundo tempo.', ${conteudo}, 3, 2, 1, 2380),
-    ('Semana começa com chuva e frio', 'A temperatura só volta a subir na quinta-feira.', ${conteudo}, 1, 1, 1, 1250),
-    ('Escola abre curso gratuito de programação', 'As aulas são à noite e as inscrições vão até sexta.', ${conteudo}, 5, 3, 1, 470),
-    ('Banco de dados chega ao portal', 'Agora as notícias moram no Postgres, lá no Neon.', ${conteudo}, 2, 3, 1, 990)
+    ('Next.js ganha nova versão', 'Confira o que mudou no framework.', ${conteudo}, 4, 3, 1, 840, 'codigo.jpg'),
+    ('Prefeitura inaugura ciclovia no centro', 'São oito quilômetros ligando os bairros à estação.', ${conteudo}, 3, 1, 1, 1920, 'ciclovia.jpg'),
+    ('Feira do livro começa neste sábado', 'O evento reúne autores da região e tem entrada gratuita.', ${conteudo}, 2, 4, 1, 610, 'livros.jpg'),
+    ('Time da cidade vence e sobe na tabela', 'A vitória por dois a zero veio no segundo tempo.', ${conteudo}, 3, 2, 1, 2380, 'futebol.jpg'),
+    ('Semana começa com chuva e frio', 'A temperatura só volta a subir na quinta-feira.', ${conteudo}, 1, 1, 1, 1250, 'chuva.jpg'),
+    ('Escola abre curso gratuito de programação', 'As aulas são à noite e as inscrições vão até sexta.', ${conteudo}, 5, 3, 1, 470, 'estudo.jpg'),
+    ('Banco de dados chega ao portal', 'Agora as notícias moram no Postgres, lá no Neon.', ${conteudo}, 2, 3, 1, 990, 'servidores.jpg')
 `;
 
 console.log("Dados de exemplo no banco!");

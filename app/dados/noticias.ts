@@ -9,7 +9,7 @@ import type { Categoria, NovaNoticia, Noticia } from "./tipos";
 // o que a manchete mostra: alguns campos da notícia, mais o nome da categoria
 export type NoticiaResumida = Pick<
   Noticia,
-  "id" | "slug" | "titulo" | "resumo" | "minutos"
+  "id" | "slug" | "titulo" | "resumo" | "minutos" | "foto"
 > & {
   categoria: string;
   categoria_slug: string;
@@ -24,7 +24,7 @@ async function manchetesEmCache(pagina: number) {
   // pede uma a mais que o tamanho da página: se ela vier, existe uma próxima página
   const noticias = (await sql`
     SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
-      categorias.slug AS categoria_slug, titulo, resumo, minutos
+      categorias.slug AS categoria_slug, titulo, resumo, minutos, foto
     FROM noticias
     JOIN categorias ON categorias.id = noticias.categoria_id
     WHERE situacao = 'publicada'
@@ -52,7 +52,7 @@ export function buscarManchetes(termo: string) {
       (await sql`
         SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
           categorias.slug AS categoria_slug,
-          titulo, resumo, minutos
+          titulo, resumo, minutos, foto
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
         WHERE situacao = 'publicada' AND titulo ILIKE ${"%" + termo + "%"}
@@ -72,7 +72,7 @@ export function listarManchetesDaCategoria(slug: string) {
 
     const noticias = (await sql`
       SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
-        categorias.slug AS categoria_slug, titulo, resumo, minutos
+        categorias.slug AS categoria_slug, titulo, resumo, minutos, foto
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id
       WHERE situacao = 'publicada' AND categorias.slug = ${slug}
@@ -145,8 +145,9 @@ export async function listarMinhasNoticias() {
   );
 }
 
-// o que o autor preenche no formulário (quem é o autor e os minutos, o servidor descobre)
-export type DadosDaNoticia = Omit<NovaNoticia, "autor_id" | "minutos">;
+// o que o autor preenche no formulário (quem é o autor e os minutos, o servidor descobre;
+// a foto, por enquanto, é a padrão do banco)
+export type DadosDaNoticia = Omit<NovaNoticia, "autor_id" | "minutos" | "foto">;
 
 // o tempo de leitura: umas 200 palavras por minuto, e nunca menos de 1 minuto
 function minutosDeLeitura(conteudo: string) {

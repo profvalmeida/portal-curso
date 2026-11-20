@@ -7,6 +7,19 @@
   flex-direction: column;
 }
 
+/* a caixa da foto: 16 por 9, com a foto preenchendo tudo */
+.foto {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-bottom: var(--espaco-2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.imagem {
+  object-fit: cover;
+}
+
 .categoria {
   color: var(--cor-destaque);
   font-size: 0.75rem;

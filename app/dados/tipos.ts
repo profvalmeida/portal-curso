@@ -34,6 +34,7 @@ export type Noticia = {
   categoria_id: number;
   autor_id: number;
   situacao: "rascunho" | "publicada";
+  foto: string;
 };
 
 // pra cadastrar: tudo, menos o que o banco preenche sozinho
