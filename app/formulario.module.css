@@ -38,3 +38,14 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.erro {
+  color: var(--cor-destaque);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
