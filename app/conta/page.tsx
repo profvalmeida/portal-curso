@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import estilos from "../formulario.module.css";
-import { contarSessoes, usuarioLogado } from "../lib/sessao";
+import { contarSessoes, exigirLogin } from "../lib/sessao";
 import { sair, sairDeTodos } from "./acoes";
 
 export const metadata: Metadata = {
@@ -11,15 +10,8 @@ export const metadata: Metadata = {
 
 // lê o cookie da pessoa: por isso fica dentro de um Suspense
 async function DadosDaConta() {
-  const usuario = await usuarioLogado();
-  if (!usuario) {
-    return (
-      <p>
-        Você não está logado. <Link href="/entrar">Entrar</Link>
-      </p>
-    );
-  }
-
+  // sem login, a pessoa nem chega aqui: o exigirLogin manda pro /entrar
+  const usuario = await exigirLogin();
   const sessoes = await contarSessoes(usuario.id);
 
   return (

@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import type { Usuario } from "../dados/tipos";
 import { sql } from "./db";
 
@@ -50,6 +51,13 @@ export async function usuarioLogado() {
     WHERE sessoes.id = ${hashDoToken(token)} AND sessoes.expira_em > now()
   `) as UsuarioLogado[];
   return usuario ?? null;
+}
+
+// a segunda camada: confere a sessão no banco. Sem sessão válida, vai pro login
+export async function exigirLogin() {
+  const usuario = await usuarioLogado();
+  if (!usuario) redirect("/entrar");
+  return usuario;
 }
 
 // o logout: apaga a sessão do banco e o cookie do navegador
