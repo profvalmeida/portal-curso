@@ -3,6 +3,7 @@
 export type Categoria = {
   id: number;
   nome: string;
+  slug: string;
   criada_em: Date;
 };
 
