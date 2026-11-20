@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { buscarNoticia } from "../../dados/noticias";
 import estilos from "./page.module.css";
@@ -8,7 +9,7 @@ async function Artigo({ params }: PageProps<"/noticias/[slug]">) {
   if (!resultado.ok) return <p>{resultado.erro}</p>;
 
   const noticia = resultado.dados;
-  if (!noticia) return <p>Notícia não encontrada.</p>;
+  if (!noticia) notFound();
 
   const data = noticia.publicada_em.toLocaleDateString("pt-BR");
   const paragrafos = noticia.conteudo.split("\n\n");
