@@ -6,8 +6,6 @@ export default async function PaginaDaNoticia({
   params,
 }: PageProps<"/noticias/[slug]">) {
   const { slug } = await params;
-  // só pra testar a página de erro: um erro de propósito
-  if (slug) throw new Error("Erro de teste");
   const resultado = await buscarNoticia(slug);
   if (!resultado.ok) return <p>{resultado.erro}</p>;
 
