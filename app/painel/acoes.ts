@@ -1,5 +1,6 @@
 "use server";
 
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   atualizarNoticia,
@@ -68,6 +69,8 @@ export async function criar(
   if (!resultado.ok) {
     return { situacao: "erro", erros: { titulo: resultado.erro }, valores };
   }
+  // joga fora o cache da página inicial: a próxima visita já vê a notícia nova
+  updateTag("noticias");
   redirect("/painel");
 }
 
@@ -86,11 +89,13 @@ export async function editar(
   if (!resultado.ok) {
     return { situacao: "erro", erros: { titulo: resultado.erro }, valores };
   }
+  updateTag("noticias");
   redirect("/painel");
 }
 
 // recebe o formulário de confirmação. O id também vem do bind
 export async function excluir(id: number) {
   await excluirNoticia(id);
+  updateTag("noticias");
   redirect("/painel");
 }
