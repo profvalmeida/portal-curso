@@ -18,6 +18,7 @@ async function ListaDeNoticias() {
             destaque
             slug={principal.slug}
             categoria={principal.categoria}
+            categoriaSlug={principal.categoria_slug}
             titulo={principal.titulo}
             resumo={principal.resumo}
             minutos={principal.minutos}
@@ -28,6 +29,7 @@ async function ListaDeNoticias() {
             key={noticia.id}
             slug={noticia.slug}
             categoria={noticia.categoria}
+            categoriaSlug={noticia.categoria_slug}
             titulo={noticia.titulo}
             resumo={noticia.resumo}
             minutos={noticia.minutos}

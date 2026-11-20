@@ -14,6 +14,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: var(--espaco-1);
+  text-decoration: none;
 }
 
 .titulo {

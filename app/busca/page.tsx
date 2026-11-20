@@ -19,6 +19,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
           key={noticia.id}
           slug={noticia.slug}
           categoria={noticia.categoria}
+          categoriaSlug={noticia.categoria_slug}
           titulo={noticia.titulo}
           resumo={noticia.resumo}
           minutos={noticia.minutos}

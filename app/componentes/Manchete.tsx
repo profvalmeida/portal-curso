@@ -4,6 +4,7 @@ import estilos from "./Manchete.module.css";
 type Props = {
   slug: string;
   categoria: string;
+  categoriaSlug: string;
   titulo: string;
   resumo: string;
   minutos: number;
@@ -13,6 +14,7 @@ type Props = {
 export default function Manchete({
   slug,
   categoria,
+  categoriaSlug,
   titulo,
   resumo,
   minutos,
@@ -24,7 +26,9 @@ export default function Manchete({
 
   return (
     <article className={classe}>
-      <span className={estilos.categoria}>{categoria}</span>
+      <Link href={`/categorias/${categoriaSlug}`} className={estilos.categoria}>
+        {categoria}
+      </Link>
       <h2 className={estilos.titulo}>
         <Link href={`/noticias/${slug}`}>{titulo}</Link>
       </h2>

@@ -1,7 +1,7 @@
 import "server-only";
 import { sql } from "../lib/db";
 import { tentar } from "../lib/resultado";
-import type { Noticia } from "./tipos";
+import type { Categoria, Noticia } from "./tipos";
 
 // o que a manchete mostra: alguns campos da notícia, mais o nome da categoria
 export type NoticiaResumida = Pick<
@@ -9,6 +9,7 @@ export type NoticiaResumida = Pick<
   "id" | "slug" | "titulo" | "resumo" | "minutos"
 > & {
   categoria: string;
+  categoria_slug: string;
 };
 
 // as manchetes da página inicial, das mais novas pras mais antigas
@@ -17,6 +18,7 @@ export function listarManchetes() {
     async () =>
       (await sql`
         SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+          categorias.slug AS categoria_slug,
           titulo, resumo, minutos
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
@@ -32,6 +34,7 @@ export function buscarManchetes(termo: string) {
     async () =>
       (await sql`
         SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+          categorias.slug AS categoria_slug,
           titulo, resumo, minutos
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
@@ -40,6 +43,26 @@ export function buscarManchetes(termo: string) {
       `) as NoticiaResumida[],
     "Não foi possível buscar as notícias agora.",
   );
+}
+
+// uma categoria pelo slug, com as manchetes dela (ou null, se a categoria não existir)
+export function listarManchetesDaCategoria(slug: string) {
+  return tentar(async () => {
+    const [categoria] = (await sql`
+      SELECT nome FROM categorias WHERE slug = ${slug}
+    `) as Pick<Categoria, "nome">[];
+    if (!categoria) return null;
+
+    const noticias = (await sql`
+      SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+        categorias.slug AS categoria_slug, titulo, resumo, minutos
+      FROM noticias
+      JOIN categorias ON categorias.id = noticias.categoria_id
+      WHERE categorias.slug = ${slug}
+      ORDER BY noticias.id DESC
+    `) as NoticiaResumida[];
+    return { nome: categoria.nome, noticias };
+  }, "Não foi possível carregar a categoria agora.");
 }
 
 // tudo o que a página da notícia mostra
