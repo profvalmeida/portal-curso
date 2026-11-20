@@ -1,0 +1,35 @@
+/* o menu do lado esquerdo e a página do lado direito */
+.painel {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--espaco-4);
+  align-items: start;
+}
+
+.lateral {
+  padding: var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  background: var(--cor-superficie);
+}
+
+.titulo {
+  margin-bottom: var(--espaco-1);
+  font-family: var(--fonte-titulo), Georgia, serif;
+  font-weight: 700;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.menu a {
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: var(--cor-destaque);
+}

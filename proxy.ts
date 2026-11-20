@@ -10,5 +10,5 @@ export function proxy(pedido: NextRequest) {
 
 // só as páginas da área restrita passam por aqui
 export const config = {
-  matcher: ["/conta/:path*"],
+  matcher: ["/conta/:path*", "/painel/:path*"],
 };

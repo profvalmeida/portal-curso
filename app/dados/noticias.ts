@@ -1,6 +1,7 @@
 import "server-only";
 import { sql } from "../lib/db";
 import { tentar } from "../lib/resultado";
+import { exigirLogin } from "../lib/sessao";
 import { site } from "../lib/site";
 import type { Categoria, Noticia } from "./tipos";
 
@@ -106,4 +107,26 @@ export function buscarNoticia(slug: string) {
     `) as NoticiaCompleta[];
     return noticia ?? null;
   }, "Não foi possível carregar a notícia agora.");
+}
+
+// o que a lista do painel mostra
+export type NoticiaDoPainel = Pick<
+  Noticia,
+  "id" | "slug" | "titulo" | "publicada_em"
+>;
+
+// as notícias de quem está logado. A checagem do login fica aqui, perto dos dados:
+// quem chamar essa função nunca esquece de conferir
+export async function listarMinhasNoticias() {
+  const usuario = await exigirLogin();
+  return tentar(
+    async () =>
+      (await sql`
+        SELECT id, slug, titulo, publicada_em
+        FROM noticias
+        WHERE autor_id = ${usuario.id}
+        ORDER BY id DESC
+      `) as NoticiaDoPainel[],
+    "Não foi possível carregar as suas notícias agora.",
+  );
 }

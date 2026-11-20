@@ -18,6 +18,7 @@ export default async function UsuarioNoCabecalho() {
   const primeiroNome = usuario.nome.split(" ")[0];
   return (
     <div className={estilos.usuario}>
+      <Link href="/painel">Painel</Link>
       <Link href="/conta">Olá, {primeiroNome}</Link>
       <form action={sair}>
         <button className={estilos.sair}>Sair</button>
