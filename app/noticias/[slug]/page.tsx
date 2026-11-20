@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import BotaoCompartilhar from "../../componentes/BotaoCompartilhar";
 import MaisLidas from "../../componentes/MaisLidas";
@@ -24,6 +25,17 @@ export default async function PaginaDaNoticia({
   return (
     <main>
       <article className={estilos.artigo}>
+        <div className={estilos.capa}>
+          <Image
+            src={`/fotos/${noticia.foto}`}
+            alt=""
+            fill
+            sizes="(max-width: 800px) 100vw, 760px"
+            loading="eager"
+            fetchPriority="high"
+            className={estilos.imagem}
+          />
+        </div>
         <span className={estilos.categoria}>{noticia.categoria}</span>
         <h1 className={estilos.titulo}>{noticia.titulo}</h1>
         <p className={estilos.resumo}>{noticia.resumo}</p>

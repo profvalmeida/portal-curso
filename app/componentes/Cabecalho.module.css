@@ -1,5 +1,10 @@
+/* o cabeçalho fica grudado no topo enquanto a página rola, com um vidro fosco por trás */
 .cabecalho {
-  background: var(--cor-superficie);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgb(255 255 255 / 0.75);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--cor-borda);
 }
 

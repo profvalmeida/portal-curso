@@ -102,7 +102,7 @@ export function listarMaisLidas() {
 // tudo o que a página da notícia mostra
 export type NoticiaCompleta = Pick<
   Noticia,
-  "titulo" | "resumo" | "conteudo" | "minutos" | "publicada_em"
+  "titulo" | "resumo" | "conteudo" | "minutos" | "publicada_em" | "foto"
 > & {
   categoria: string;
   autor: string;
@@ -112,7 +112,7 @@ export type NoticiaCompleta = Pick<
 export function buscarNoticia(slug: string) {
   return tentar(async () => {
     const [noticia] = (await sql`
-      SELECT titulo, resumo, conteudo, minutos, publicada_em,
+      SELECT titulo, resumo, conteudo, minutos, publicada_em, foto,
         categorias.nome AS categoria, usuarios.nome AS autor
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id

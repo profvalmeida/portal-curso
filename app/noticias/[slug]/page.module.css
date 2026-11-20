@@ -1,6 +1,19 @@
+/* a largura de leitura: uns 68 caracteres por linha, medida na letra do texto */
 .artigo {
-  max-width: 720px;
+  max-width: 68ch;
   margin: 0 auto;
+}
+
+.capa {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-bottom: var(--espaco-3);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.imagem {
+  object-fit: cover;
 }
 
 .categoria {
@@ -11,8 +24,9 @@
   text-transform: uppercase;
 }
 
+/* o título cresce com a tela: nunca menor que 2rem, nunca maior que 3rem */
 .titulo {
-  font-size: 2.6rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1.15;
   margin-top: var(--espaco-1);
 }

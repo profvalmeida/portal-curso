@@ -109,7 +109,7 @@
 }
 
 .destaque .titulo {
-  font-size: 2.25rem;
+  font-size: clamp(1.6rem, 4vw, 2.75rem);
   line-height: 1.15;
 }
 
