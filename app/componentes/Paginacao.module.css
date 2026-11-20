@@ -1,0 +1,19 @@
+.paginacao {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: var(--espaco-4);
+}
+
+.paginacao a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.paginacao a:last-child {
+  justify-self: end;
+}
+
+.atual {
+  color: var(--cor-texto-suave);
+}

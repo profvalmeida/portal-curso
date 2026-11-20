@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Manchete from "./componentes/Manchete";
+import Paginacao from "./componentes/Paginacao";
 import { listarManchetes } from "./dados/noticias";
 import estilos from "./page.module.css";
 
@@ -10,7 +11,7 @@ async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
 
   const resultado = await listarManchetes(pagina);
   if (!resultado.ok) return <p>{resultado.erro}</p>;
-  const { noticias } = resultado.dados;
+  const { noticias, temProxima } = resultado.dados;
   // só a primeira página tem a manchete em destaque
   const principal = pagina === 1 ? noticias[0] : undefined;
   const outras = pagina === 1 ? noticias.slice(1) : noticias;
@@ -42,6 +43,7 @@ async function ListaDeNoticias({ searchParams }: PageProps<"/">) {
           />
         ))}
       </section>
+      <Paginacao pagina={pagina} temProxima={temProxima} />
     </>
   );
 }
