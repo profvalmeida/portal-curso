@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import estilos from "../formulario.module.css";
 import { usuarioLogado } from "../lib/sessao";
+import { sair } from "./acoes";
 
 export const metadata: Metadata = {
   title: "Minha conta",
@@ -25,6 +26,9 @@ async function DadosDaConta() {
         Olá, <strong>{usuario.nome}</strong>!
       </p>
       <p>Você entrou com o e-mail {usuario.email}.</p>
+      <form action={sair}>
+        <button className={estilos.botao}>Sair</button>
+      </form>
     </>
   );
 }

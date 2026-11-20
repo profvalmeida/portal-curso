@@ -48,3 +48,13 @@ export async function usuarioLogado() {
   `) as UsuarioLogado[];
   return usuario ?? null;
 }
+
+// o logout: apaga a sessão do banco e o cookie do navegador
+export async function encerrarSessao() {
+  const cookiesDoPedido = await cookies();
+  const token = cookiesDoPedido.get(COOKIE_DA_SESSAO)?.value;
+  if (token) {
+    await sql`DELETE FROM sessoes WHERE id = ${hashDoToken(token)}`;
+  }
+  cookiesDoPedido.delete(COOKIE_DA_SESSAO);
+}
