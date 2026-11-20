@@ -21,6 +21,15 @@
   line-height: 1.3;
 }
 
+.titulo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titulo a:hover {
+  color: var(--cor-destaque);
+}
+
 .resumo {
   color: var(--cor-texto-suave);
   margin-top: var(--espaco-1);

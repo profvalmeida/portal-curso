@@ -17,6 +17,7 @@ async function Resultados({ searchParams }: PageProps<"/busca">) {
       {resultado.dados.map((noticia) => (
         <Manchete
           key={noticia.id}
+          slug={noticia.slug}
           categoria={noticia.categoria}
           titulo={noticia.titulo}
           resumo={noticia.resumo}

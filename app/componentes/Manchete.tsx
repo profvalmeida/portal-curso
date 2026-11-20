@@ -1,6 +1,8 @@
+import Link from "next/link";
 import estilos from "./Manchete.module.css";
 
 type Props = {
+  slug: string;
   categoria: string;
   titulo: string;
   resumo: string;
@@ -9,6 +11,7 @@ type Props = {
 };
 
 export default function Manchete({
+  slug,
   categoria,
   titulo,
   resumo,
@@ -22,7 +25,9 @@ export default function Manchete({
   return (
     <article className={classe}>
       <span className={estilos.categoria}>{categoria}</span>
-      <h2 className={estilos.titulo}>{titulo}</h2>
+      <h2 className={estilos.titulo}>
+        <Link href={`/noticias/${slug}`}>{titulo}</Link>
+      </h2>
       <p className={estilos.resumo}>{resumo}</p>
       <small className={estilos.tempo}>{minutos} min de leitura</small>
     </article>

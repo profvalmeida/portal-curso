@@ -6,7 +6,7 @@ import type { Noticia } from "./tipos";
 // o que a manchete mostra: alguns campos da notícia, mais o nome da categoria
 export type NoticiaResumida = Pick<
   Noticia,
-  "id" | "titulo" | "resumo" | "minutos"
+  "id" | "slug" | "titulo" | "resumo" | "minutos"
 > & {
   categoria: string;
 };
@@ -16,7 +16,8 @@ export function listarManchetes() {
   return tentar(
     async () =>
       (await sql`
-        SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
+        SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+          titulo, resumo, minutos
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
         ORDER BY noticias.id DESC
@@ -30,7 +31,8 @@ export function buscarManchetes(termo: string) {
   return tentar(
     async () =>
       (await sql`
-        SELECT noticias.id, categorias.nome AS categoria, titulo, resumo, minutos
+        SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+          titulo, resumo, minutos
         FROM noticias
         JOIN categorias ON categorias.id = noticias.categoria_id
         WHERE titulo ILIKE ${"%" + termo + "%"}

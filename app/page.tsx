@@ -16,6 +16,7 @@ async function ListaDeNoticias() {
         {principal && (
           <Manchete
             destaque
+            slug={principal.slug}
             categoria={principal.categoria}
             titulo={principal.titulo}
             resumo={principal.resumo}
@@ -25,6 +26,7 @@ async function ListaDeNoticias() {
         {outras.map((noticia) => (
           <Manchete
             key={noticia.id}
+            slug={noticia.slug}
             categoria={noticia.categoria}
             titulo={noticia.titulo}
             resumo={noticia.resumo}
