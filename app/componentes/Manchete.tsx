@@ -36,17 +36,25 @@ export default function Manchete({
           alt=""
           fill
           sizes={destaque ? "1100px" : "(max-width: 600px) 100vw, 360px"}
+          // a foto da manchete principal é a maior da tela: carrega primeiro
+          loading={destaque ? "eager" : "lazy"}
+          fetchPriority={destaque ? "high" : "auto"}
           className={estilos.imagem}
         />
       </div>
-      <Link href={`/categorias/${categoriaSlug}`} className={estilos.categoria}>
-        {categoria}
-      </Link>
-      <h2 className={estilos.titulo}>
-        <Link href={`/noticias/${slug}`}>{titulo}</Link>
-      </h2>
-      <p className={estilos.resumo}>{resumo}</p>
-      <small className={estilos.tempo}>{minutos} min de leitura</small>
+      <div className={estilos.texto}>
+        <Link
+          href={`/categorias/${categoriaSlug}`}
+          className={estilos.categoria}
+        >
+          {categoria}
+        </Link>
+        <h2 className={estilos.titulo}>
+          <Link href={`/noticias/${slug}`}>{titulo}</Link>
+        </h2>
+        <p className={estilos.resumo}>{resumo}</p>
+        <small className={estilos.tempo}>{minutos} min de leitura</small>
+      </div>
     </article>
   );
 }
