@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--espaco-4);
 }
 
 .marca {
@@ -22,6 +23,7 @@
 
 .menu {
   display: flex;
+  margin-left: auto;
   gap: var(--espaco-3);
 }
 

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { site } from "../lib/site";
 import estilos from "./Cabecalho.module.css";
+import UsuarioNoCabecalho from "./UsuarioNoCabecalho";
 
 export default function Cabecalho() {
   return (
@@ -16,6 +18,10 @@ export default function Cabecalho() {
             </Link>
           ))}
         </nav>
+        {/* o resto do cabeçalho é igual pra todo mundo; só esse pedaço depende do cookie */}
+        <Suspense fallback={null}>
+          <UsuarioNoCabecalho />
+        </Suspense>
       </div>
     </header>
   );

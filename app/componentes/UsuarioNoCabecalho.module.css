@@ -1,0 +1,31 @@
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.usuario a {
+  color: var(--cor-texto);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sair {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  cursor: pointer;
+}
+
+.entrar {
+  color: var(--cor-destaque);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sair:hover,
+.entrar:hover {
+  color: var(--cor-destaque);
+}
