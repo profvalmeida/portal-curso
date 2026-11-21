@@ -52,6 +52,12 @@
   font-weight: 400;
 }
 
+.sucesso {
+  color: #1a7f37;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
 .botaoSecundario {
   margin-top: var(--espaco-2);
   padding: 0;

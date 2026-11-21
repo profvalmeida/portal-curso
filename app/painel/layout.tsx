@@ -11,6 +11,7 @@ export default function LayoutDoPainel({ children }: LayoutProps<"/painel">) {
         <nav className={estilos.menu}>
           <Link href="/painel">Minhas notícias</Link>
           <Link href="/painel/nova">Nova notícia</Link>
+          <Link href="/painel/categorias">Categorias</Link>
         </nav>
       </aside>
       <section>{children}</section>
