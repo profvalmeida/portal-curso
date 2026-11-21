@@ -99,6 +99,21 @@ export function listarManchetesDoAutor(autorId: number) {
   );
 }
 
+// o endereço e a data de cada notícia publicada, pro sitemap. Em cache, com a mesma etiqueta da
+// página inicial: quando uma notícia é publicada, o updateTag atualiza os dois
+export type NoticiaDoSitemap = Pick<Noticia, "slug" | "publicada_em">;
+
+export async function listarParaOSitemap() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("noticias");
+  return (await sql`
+    SELECT slug, publicada_em FROM noticias
+    WHERE situacao = 'publicada'
+    ORDER BY publicada_em DESC
+  `) as NoticiaDoSitemap[];
+}
+
 // as três notícias mais lidas do portal
 export type MaisLida = Pick<Noticia, "slug" | "titulo">;
 

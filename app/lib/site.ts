@@ -16,3 +16,6 @@ export const site = {
     { rotulo: "Buscar", href: "/busca" },
   ],
 } as const satisfies ConfigDoSite;
+
+// o endereço do site (no seu computador, o localhost; publicado, o endereço de verdade)
+export const enderecoDoSite = process.env.SITE_URL ?? "http://localhost:3000";
