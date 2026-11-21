@@ -4,6 +4,7 @@ import { buscarMeuPerfil } from "../dados/autores";
 import estilos from "../formulario.module.css";
 import { contarSessoes, exigirLogin } from "../lib/sessao";
 import { sair, sairDeTodos } from "./acoes";
+import FormularioDoPerfil from "./FormularioDoPerfil";
 import pagina from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -35,6 +36,10 @@ async function DadosDaConta() {
           <strong>{publicadas}</strong>{" "}
           {publicadas === 1 ? "notícia publicada" : "notícias publicadas"}
         </p>
+      </section>
+      <section className={pagina.secao}>
+        <h2>Editar perfil</h2>
+        <FormularioDoPerfil nome={nome} bio={bio} />
       </section>
       <section className={pagina.secao}>
         <h2>Segurança</h2>

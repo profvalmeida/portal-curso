@@ -41,3 +41,15 @@ export async function buscarMeuPerfil() {
     return perfil;
   }, "Não foi possível carregar o seu perfil agora.");
 }
+
+// o que a pessoa pode mudar no próprio perfil
+export type DadosDoPerfil = Pick<Usuario, "nome" | "bio">;
+
+// grava o nome e a bio de quem está logado: o WHERE usa o id da sessão, nunca um id do formulário
+export async function atualizarPerfil(dados: DadosDoPerfil) {
+  const usuario = await exigirLogin();
+  await sql`
+    UPDATE usuarios SET nome = ${dados.nome}, bio = ${dados.bio}
+    WHERE id = ${usuario.id}
+  `;
+}
