@@ -40,3 +40,49 @@
 .menu a:hover {
   color: var(--cor-destaque);
 }
+
+/* a faixa das categorias: uma linha só. Se não couber (no celular), ela rola pro lado */
+.categorias {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.listaDeCategorias {
+  max-width: var(--largura-maxima);
+  margin: 0 auto;
+  padding: var(--espaco-1) var(--espaco-3);
+  display: flex;
+  gap: var(--espaco-3);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.listaDeCategorias a {
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.listaDeCategorias a:hover {
+  color: var(--cor-destaque);
+}
+
+/* no celular, a marca fica sozinha numa linha, e o menu e o usuário descem pra de baixo */
+@media (max-width: 600px) {
+  .conteudo {
+    flex-wrap: wrap;
+    gap: var(--espaco-1) var(--espaco-2);
+  }
+
+  .marca {
+    flex-basis: 100%;
+  }
+
+  .menu {
+    margin-left: 0;
+    gap: var(--espaco-2);
+  }
+}

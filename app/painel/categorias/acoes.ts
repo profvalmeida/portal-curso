@@ -1,6 +1,6 @@
 "use server";
 
-import { refresh } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { apagarCategoria, criarCategoria } from "../../dados/categorias";
 import { campoDeTexto } from "../../lib/validacao";
 
@@ -26,6 +26,8 @@ export async function criar(
   const resultado = await criarCategoria(nome);
   if (!resultado.ok) return { situacao: "erro", erro: resultado.erro, nome };
 
+  // o menu do cabeçalho está em cache: joga fora, pra ele já mostrar a categoria nova
+  updateTag("categorias");
   // a lista da página foi montada antes da categoria existir: o refresh monta de novo
   refresh();
   return { situacao: "criada", nome };
@@ -39,6 +41,7 @@ export type EstadoDoApagar =
 export async function apagar(id: number): Promise<EstadoDoApagar> {
   const resultado = await apagarCategoria(id);
   if (!resultado.ok) return { situacao: "erro", erro: resultado.erro };
+  updateTag("categorias");
   refresh();
   return { situacao: "pronto" };
 }

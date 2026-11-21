@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { ehReferenciaEmUso, ehValorRepetido, sql } from "../lib/db";
 import { tentar, type Resultado } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
@@ -69,4 +70,24 @@ export async function apagarCategoria(id: number): Promise<Resultado<null>> {
     }
     throw erro;
   }
+}
+
+// o que o menu do cabeçalho precisa de cada categoria
+export type CategoriaDoMenu = Pick<Categoria, "nome" | "slug">;
+
+// o menu aparece em toda página e muda pouco: fica em cache, com a etiqueta "categorias"
+async function categoriasEmCache() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("categorias");
+  return (await sql`
+    SELECT nome, slug FROM categorias ORDER BY nome
+  `) as CategoriaDoMenu[];
+}
+
+export function listarCategoriasDoMenu() {
+  return tentar(
+    () => categoriasEmCache(),
+    "Não foi possível carregar as categorias agora.",
+  );
 }

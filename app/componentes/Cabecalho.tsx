@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { site } from "../lib/site";
 import estilos from "./Cabecalho.module.css";
+import MenuDeCategorias from "./MenuDeCategorias";
 import UsuarioNoCabecalho from "./UsuarioNoCabecalho";
 
 export default function Cabecalho() {
@@ -23,6 +24,7 @@ export default function Cabecalho() {
           <UsuarioNoCabecalho />
         </Suspense>
       </div>
+      <MenuDeCategorias />
     </header>
   );
 }
