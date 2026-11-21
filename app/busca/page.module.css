@@ -1,0 +1,33 @@
+/* a barra de busca: o campo estica, e o botão fica colado do lado */
+.barra {
+  display: flex;
+  gap: var(--espaco-1);
+  max-width: 640px;
+  margin-top: var(--espaco-2);
+}
+
+.campo {
+  flex: 1;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  background: var(--cor-superficie);
+  font: inherit;
+}
+
+/* o contorno de foco na cor do portal, pra quem usa o teclado ver onde está */
+.campo:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+.botao {
+  padding: var(--espaco-1) var(--espaco-3);
+  border: 0;
+  border-radius: 999px;
+  background: var(--cor-destaque);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

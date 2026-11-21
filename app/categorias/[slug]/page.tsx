@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import EstadoVazio from "../../componentes/EstadoVazio";
 import Manchete from "../../componentes/Manchete";
 import { listarManchetesDaCategoria } from "../../dados/noticias";
 import estilos from "../../page.module.css";
@@ -16,7 +17,11 @@ async function Categoria({ params }: PageProps<"/categorias/[slug]">) {
     <>
       <h1>{categoria.nome}</h1>
       {categoria.noticias.length === 0 && (
-        <p>Ainda não tem nenhuma notícia nesta categoria.</p>
+        <EstadoVazio
+          titulo="Nada por aqui ainda"
+          texto={`Ainda não tem nenhuma notícia em ${categoria.nome}.`}
+          link={{ href: "/", rotulo: "Ver as últimas notícias" }}
+        />
       )}
       <section className={estilos.grade}>
         {categoria.noticias.map((noticia) => (

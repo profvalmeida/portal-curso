@@ -1,0 +1,25 @@
+/* uma caixa tracejada, no centro: parece um espaço esperando ser preenchido */
+.vazio {
+  margin-top: var(--espaco-3);
+  padding: var(--espaco-4) var(--espaco-3);
+  border: 2px dashed var(--cor-borda);
+  border-radius: 14px;
+  text-align: center;
+}
+
+.titulo {
+  font-family: var(--fonte-titulo), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.texto {
+  margin-top: var(--espaco-1);
+  color: var(--cor-texto-suave);
+}
+
+.link {
+  display: inline-block;
+  margin-top: var(--espaco-2);
+  font-weight: 600;
+}

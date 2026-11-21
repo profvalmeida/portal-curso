@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import EstadoVazio from "../../componentes/EstadoVazio";
 import Manchete from "../../componentes/Manchete";
 import { buscarPerfilPublico } from "../../dados/autores";
 import { listarManchetesDoAutor } from "../../dados/noticias";
@@ -30,7 +31,10 @@ async function Autor({ params }: PageProps<"/autores/[id]">) {
         </p>
       </header>
       {noticias.dados.length === 0 && (
-        <p>{nome} ainda não publicou nenhuma notícia.</p>
+        <EstadoVazio
+          titulo="Nenhuma notícia ainda"
+          texto={`${nome} ainda não publicou nenhuma notícia.`}
+        />
       )}
       <section className={grade.grade}>
         {noticias.dados.map((noticia) => (
