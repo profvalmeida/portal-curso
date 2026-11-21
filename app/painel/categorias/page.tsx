@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { listarCategoriasComTotal } from "../../dados/categorias";
 import estilos from "../page.module.css";
+import BotaoApagar from "./BotaoApagar";
 import Formulario from "./Formulario";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ async function Lista() {
               ? "1 notícia"
               : `${categoria.total} notícias`}
           </span>
+          <BotaoApagar id={categoria.id} />
         </li>
       ))}
     </ul>

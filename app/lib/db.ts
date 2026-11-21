@@ -7,3 +7,8 @@ export const sql = neon(process.env.DATABASE_URL!);
 export function ehValorRepetido(erro: unknown) {
   return erro instanceof NeonDbError && erro.code === "23505";
 }
+
+// o banco recusou apagar uma linha que outra tabela ainda usa? (FOREIGN KEY: código 23503)
+export function ehReferenciaEmUso(erro: unknown) {
+  return erro instanceof NeonDbError && erro.code === "23503";
+}

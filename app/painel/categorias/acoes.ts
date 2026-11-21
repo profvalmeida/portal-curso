@@ -1,7 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
-import { criarCategoria } from "../../dados/categorias";
+import { apagarCategoria, criarCategoria } from "../../dados/categorias";
 import { campoDeTexto } from "../../lib/validacao";
 
 // o que o formulário mostra: preenchendo, o erro (com o nome que a pessoa escreveu), ou criada
@@ -29,4 +29,16 @@ export async function criar(
   // a lista da página foi montada antes da categoria existir: o refresh monta de novo
   refresh();
   return { situacao: "criada", nome };
+}
+
+// o botão de apagar de cada categoria: ou está pronto, ou mostra o erro
+export type EstadoDoApagar =
+  { situacao: "pronto" } | { situacao: "erro"; erro: string };
+
+// o id vem do bind, como no editar das notícias
+export async function apagar(id: number): Promise<EstadoDoApagar> {
+  const resultado = await apagarCategoria(id);
+  if (!resultado.ok) return { situacao: "erro", erro: resultado.erro };
+  refresh();
+  return { situacao: "pronto" };
 }

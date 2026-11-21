@@ -1,0 +1,21 @@
+/* o botão fica na mesma linha da categoria, com o erro (se tiver) do lado */
+.formulario {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+/* um botão com cara de link: discreto, pra não competir com o nome da categoria */
+.botao {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-destaque);
+  font: inherit;
+  cursor: pointer;
+}
+
+.erro {
+  color: var(--cor-destaque);
+  font-size: 0.85rem;
+}

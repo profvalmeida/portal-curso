@@ -1,5 +1,5 @@
 import "server-only";
-import { ehValorRepetido, sql } from "../lib/db";
+import { ehReferenciaEmUso, ehValorRepetido, sql } from "../lib/db";
 import { tentar, type Resultado } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
 import type { Categoria } from "./tipos";
@@ -49,6 +49,23 @@ export async function criarCategoria(nome: string): Promise<Resultado<null>> {
   } catch (erro) {
     if (ehValorRepetido(erro)) {
       return { ok: false, erro: "Já existe uma categoria com esse nome." };
+    }
+    throw erro;
+  }
+}
+
+// apaga uma categoria. Se ainda tem notícia nela, a FOREIGN KEY das notícias não deixa
+export async function apagarCategoria(id: number): Promise<Resultado<null>> {
+  await exigirLogin();
+  try {
+    await sql`DELETE FROM categorias WHERE id = ${id}`;
+    return { ok: true, dados: null };
+  } catch (erro) {
+    if (ehReferenciaEmUso(erro)) {
+      return {
+        ok: false,
+        erro: "Essa categoria tem notícias. Mude a categoria delas antes de apagar.",
+      };
     }
     throw erro;
   }
