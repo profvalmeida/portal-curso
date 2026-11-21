@@ -9,6 +9,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--fonte-texto" });
 const lora = Lora({ subsets: ["latin"], variable: "--fonte-titulo" });
 
 export const metadata: Metadata = {
+  // o endereço do site: as imagens do Open Graph precisam do endereço completo
+  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
   title: {
     default: site.nome,
     template: `%s | ${site.nome}`,

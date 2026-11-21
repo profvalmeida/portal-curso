@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import EstadoVazio from "../../componentes/EstadoVazio";
@@ -6,6 +7,17 @@ import { buscarPerfilPublico } from "../../dados/autores";
 import { listarManchetesDoAutor } from "../../dados/noticias";
 import grade from "../../page.module.css";
 import estilos from "./page.module.css";
+
+// o nome do autor na aba (e no link compartilhado)
+export async function generateMetadata({
+  params,
+}: PageProps<"/autores/[id]">): Promise<Metadata> {
+  const id = Number((await params).id);
+  if (!Number.isInteger(id)) return {};
+  const autor = await buscarPerfilPublico(id);
+  if (!autor.ok || !autor.dados) return {};
+  return { title: autor.dados.nome, description: autor.dados.bio || undefined };
+}
 
 async function Autor({ params }: PageProps<"/autores/[id]">) {
   const id = Number((await params).id);

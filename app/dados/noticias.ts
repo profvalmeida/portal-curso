@@ -1,5 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
+import { cache } from "react";
 import { ehValorRepetido, sql } from "../lib/db";
 import { tentar, type Resultado } from "../lib/resultado";
 import { exigirLogin } from "../lib/sessao";
@@ -130,8 +131,10 @@ export type NoticiaCompleta = Pick<
   autor: string;
 };
 
-// uma notícia pelo slug, ou null se não existir nenhuma com esse endereço
-export function buscarNoticia(slug: string) {
+// uma notícia pelo slug, ou null se não existir nenhuma com esse endereço.
+// O cache do React: no mesmo pedido, a página e o generateMetadata pedem a mesma notícia, e o
+// banco só é consultado uma vez
+export const buscarNoticia = cache((slug: string) => {
   return tentar(async () => {
     const [noticia] = (await sql`
       SELECT titulo, resumo, conteudo, minutos, publicada_em, foto, autor_id,
@@ -143,7 +146,7 @@ export function buscarNoticia(slug: string) {
     `) as NoticiaCompleta[];
     return noticia ?? null;
   }, "Não foi possível carregar a notícia agora.");
-}
+});
 
 // o que a lista do painel mostra
 export type NoticiaDoPainel = Pick<

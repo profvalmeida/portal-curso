@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,6 +6,29 @@ import BotaoCompartilhar from "../../componentes/BotaoCompartilhar";
 import MaisLidas from "../../componentes/MaisLidas";
 import { buscarNoticia, listarMaisLidas } from "../../dados/noticias";
 import estilos from "./page.module.css";
+
+// o título da aba, e o que aparece quando alguém compartilha o link (Open Graph)
+export async function generateMetadata({
+  params,
+}: PageProps<"/noticias/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const resultado = await buscarNoticia(slug);
+  if (!resultado.ok || !resultado.dados) return {};
+
+  const { titulo, resumo, foto, publicada_em, autor } = resultado.dados;
+  return {
+    title: titulo,
+    description: resumo,
+    openGraph: {
+      type: "article",
+      title: titulo,
+      description: resumo,
+      publishedTime: publicada_em.toISOString(),
+      authors: [autor],
+      images: [{ url: `/fotos/${foto}`, alt: titulo }],
+    },
+  };
+}
 
 export default async function PaginaDaNoticia({
   params,
