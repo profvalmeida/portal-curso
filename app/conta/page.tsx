@@ -4,6 +4,7 @@ import { buscarMeuPerfil } from "../dados/autores";
 import estilos from "../formulario.module.css";
 import { contarSessoes, exigirLogin } from "../lib/sessao";
 import { sair, sairDeTodos } from "./acoes";
+import FormularioDaSenha from "./FormularioDaSenha";
 import FormularioDoPerfil from "./FormularioDoPerfil";
 import pagina from "./page.module.css";
 
@@ -43,7 +44,8 @@ async function DadosDaConta() {
       </section>
       <section className={pagina.secao}>
         <h2>Segurança</h2>
-        <p>Sessões abertas: {sessoes}</p>
+        <FormularioDaSenha />
+        <p className={pagina.sessoes}>Sessões abertas: {sessoes}</p>
         <form action={sair}>
           <button className={estilos.botao}>Sair</button>
         </form>

@@ -1,7 +1,8 @@
 import "server-only";
 import { sql } from "../lib/db";
-import { tentar } from "../lib/resultado";
-import { exigirLogin } from "../lib/sessao";
+import { tentar, type Resultado } from "../lib/resultado";
+import { conferirSenha, gerarHash } from "../lib/senha";
+import { encerrarOutrasSessoes, exigirLogin } from "../lib/sessao";
 import type { Usuario } from "./tipos";
 
 // DTO: só o que pode sair do servidor sobre um autor
@@ -52,4 +53,26 @@ export async function atualizarPerfil(dados: DadosDoPerfil) {
     UPDATE usuarios SET nome = ${dados.nome}, bio = ${dados.bio}
     WHERE id = ${usuario.id}
   `;
+}
+
+// troca a senha de quem está logado, depois de conferir a senha atual
+export async function trocarSenha(
+  atual: string,
+  nova: string,
+): Promise<Resultado<null>> {
+  const usuario = await exigirLogin();
+  const [linha] = (await sql`
+    SELECT senha_hash FROM usuarios WHERE id = ${usuario.id}
+  `) as Pick<Usuario, "senha_hash">[];
+
+  // quem esqueceu o computador aberto não pode trocar a senha de ninguém: pede a atual
+  if (!(await conferirSenha(atual, linha.senha_hash))) {
+    return { ok: false, erro: "A senha atual não confere." };
+  }
+
+  const senhaHash = await gerarHash(nova);
+  await sql`UPDATE usuarios SET senha_hash = ${senhaHash} WHERE id = ${usuario.id}`;
+  // senha nova: os outros aparelhos (que talvez não sejam dela) saem
+  await encerrarOutrasSessoes(usuario.id);
+  return { ok: true, dados: null };
 }

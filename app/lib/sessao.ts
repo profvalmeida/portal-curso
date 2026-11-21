@@ -85,3 +85,12 @@ export async function encerrarTodasAsSessoes(usuarioId: number) {
   await sql`DELETE FROM sessoes WHERE usuario_id = ${usuarioId}`;
   (await cookies()).delete(COOKIE_DA_SESSAO);
 }
+
+// encerra as sessões dos outros aparelhos, e mantém a deste (quem acabou de trocar a senha continua logado)
+export async function encerrarOutrasSessoes(usuarioId: number) {
+  const token = (await cookies()).get(COOKIE_DA_SESSAO)?.value ?? "";
+  await sql`
+    DELETE FROM sessoes
+    WHERE usuario_id = ${usuarioId} AND id <> ${hashDoToken(token)}
+  `;
+}

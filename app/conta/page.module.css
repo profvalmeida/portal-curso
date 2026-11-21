@@ -26,3 +26,9 @@
   color: var(--cor-destaque);
   font-size: 1.5rem;
 }
+
+.sessoes {
+  margin-top: var(--espaco-3);
+  padding-top: var(--espaco-2);
+  border-top: 1px solid var(--cor-borda);
+}
