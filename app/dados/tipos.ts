@@ -13,6 +13,7 @@ export type Usuario = {
   email: string;
   senha_hash: string;
   criado_em: Date;
+  bio: string;
 };
 
 export type Sessao = {

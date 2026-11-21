@@ -1,0 +1,28 @@
+/* cada parte da conta num cartão */
+.secao {
+  margin-top: var(--espaco-3);
+  padding: var(--espaco-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  background: var(--cor-superficie);
+}
+
+.detalhe {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.bio {
+  margin-top: var(--espaco-2);
+  font-style: italic;
+}
+
+.numero {
+  margin-top: var(--espaco-2);
+  color: var(--cor-texto-suave);
+}
+
+.numero strong {
+  color: var(--cor-destaque);
+  font-size: 1.5rem;
+}

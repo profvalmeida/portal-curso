@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { buscarMeuPerfil } from "../dados/autores";
 import estilos from "../formulario.module.css";
 import { contarSessoes, exigirLogin } from "../lib/sessao";
 import { sair, sairDeTodos } from "./acoes";
+import pagina from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Minha conta",
@@ -12,23 +14,40 @@ export const metadata: Metadata = {
 async function DadosDaConta() {
   // sem login, a pessoa nem chega aqui: o exigirLogin manda pro /entrar
   const usuario = await exigirLogin();
-  const sessoes = await contarSessoes(usuario.id);
+  const [perfil, sessoes] = await Promise.all([
+    buscarMeuPerfil(),
+    contarSessoes(usuario.id),
+  ]);
+  if (!perfil.ok) return <p>{perfil.erro}</p>;
+  const { nome, email, bio, criado_em, publicadas } = perfil.dados;
 
   return (
     <>
-      <p>
-        Olá, <strong>{usuario.nome}</strong>!
-      </p>
-      <p>Você entrou com o e-mail {usuario.email}.</p>
-      <p>Sessões abertas: {sessoes}</p>
-      <form action={sair}>
-        <button className={estilos.botao}>Sair</button>
-      </form>
-      <form action={sairDeTodos}>
-        <button className={estilos.botaoSecundario}>
-          Sair de todos os aparelhos
-        </button>
-      </form>
+      <section className={pagina.secao}>
+        <h2>{nome}</h2>
+        <p className={pagina.detalhe}>
+          {email} · no portal desde {criado_em.toLocaleDateString("pt-BR")}
+        </p>
+        <p className={pagina.bio}>
+          {bio || "Você ainda não escreveu a sua bio."}
+        </p>
+        <p className={pagina.numero}>
+          <strong>{publicadas}</strong>{" "}
+          {publicadas === 1 ? "notícia publicada" : "notícias publicadas"}
+        </p>
+      </section>
+      <section className={pagina.secao}>
+        <h2>Segurança</h2>
+        <p>Sessões abertas: {sessoes}</p>
+        <form action={sair}>
+          <button className={estilos.botao}>Sair</button>
+        </form>
+        <form action={sairDeTodos}>
+          <button className={estilos.botaoSecundario}>
+            Sair de todos os aparelhos
+          </button>
+        </form>
+      </section>
     </>
   );
 }
