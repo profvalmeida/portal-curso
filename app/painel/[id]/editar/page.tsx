@@ -23,12 +23,18 @@ async function Edicao({ params }: { params: Promise<{ id: string }> }) {
   if (!categorias.ok) return <p>{categorias.erro}</p>;
   if (!noticia.dados) notFound();
 
-  const { titulo, resumo, conteudo, categoria_id } = noticia.dados;
+  const { titulo, resumo, conteudo, categoria_id, foto } = noticia.dados;
   return (
     <FormularioDaNoticia
       categorias={categorias.dados}
       acao={editar.bind(null, id)}
-      inicio={{ titulo, resumo, conteudo, categoria: String(categoria_id) }}
+      inicio={{
+        titulo,
+        resumo,
+        conteudo,
+        categoria: String(categoria_id),
+        foto,
+      }}
       botao="Salvar e publicar"
     />
   );

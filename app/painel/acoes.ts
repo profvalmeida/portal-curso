@@ -8,9 +8,10 @@ import {
   excluirNoticia,
   type DadosDaNoticia,
 } from "../dados/noticias";
+import { ehFoto } from "../lib/fotos";
 import { campoDeTexto } from "../lib/validacao";
 
-type Campo = "titulo" | "resumo" | "categoria" | "conteudo";
+type Campo = "titulo" | "resumo" | "categoria" | "conteudo" | "foto";
 export type ValoresDaNoticia = Record<Campo, string>;
 
 // o que o formulário mostra: ou está preenchendo, ou deu erro (com o que a pessoa já escreveu)
@@ -29,6 +30,7 @@ function conferir(dados: FormData) {
     resumo: campoDeTexto(dados, "resumo"),
     categoria: campoDeTexto(dados, "categoria"),
     conteudo: campoDeTexto(dados, "conteudo"),
+    foto: campoDeTexto(dados, "foto"),
   };
 
   // a barreira de verdade: o navegador pode ser enganado, o servidor não
@@ -42,12 +44,15 @@ function conferir(dados: FormData) {
     erros.categoria = "Escolha uma categoria.";
   if (valores.conteudo.length < 20)
     erros.conteudo = "O texto precisa ter pelo menos 20 letras.";
+  // a foto tem que ser uma da lista: o navegador pode mandar qualquer coisa
+  if (!ehFoto(valores.foto)) erros.foto = "Escolha uma foto.";
 
   const noticia: DadosDaNoticia = {
     titulo: valores.titulo,
     resumo: valores.resumo,
     conteudo: valores.conteudo,
     categoria_id: categoriaId,
+    foto: valores.foto,
     // qual botão a pessoa apertou: qualquer coisa que não seja "rascunho" publica
     situacao:
       campoDeTexto(dados, "situacao") === "rascunho" ? "rascunho" : "publicada",

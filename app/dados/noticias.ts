@@ -145,9 +145,8 @@ export async function listarMinhasNoticias() {
   );
 }
 
-// o que o autor preenche no formulário (quem é o autor e os minutos, o servidor descobre;
-// a foto, por enquanto, é a padrão do banco)
-export type DadosDaNoticia = Omit<NovaNoticia, "autor_id" | "minutos" | "foto">;
+// o que o autor preenche no formulário (quem é o autor e os minutos, o servidor descobre)
+export type DadosDaNoticia = Omit<NovaNoticia, "autor_id" | "minutos">;
 
 // o tempo de leitura: umas 200 palavras por minuto, e nunca menos de 1 minuto
 function minutosDeLeitura(conteudo: string) {
@@ -174,10 +173,10 @@ export async function criarNoticia(
   try {
     await sql`
       INSERT INTO noticias
-        (titulo, resumo, conteudo, minutos, categoria_id, situacao, autor_id)
+        (titulo, resumo, conteudo, minutos, categoria_id, situacao, foto, autor_id)
       VALUES (${dados.titulo}, ${dados.resumo}, ${dados.conteudo},
         ${minutosDeLeitura(dados.conteudo)}, ${dados.categoria_id},
-        ${dados.situacao}, ${usuario.id})
+        ${dados.situacao}, ${dados.foto}, ${usuario.id})
     `;
     return { ok: true, dados: null };
   } catch (erro) {
@@ -188,7 +187,7 @@ export async function criarNoticia(
 // o que o formulário de editar precisa saber da notícia
 export type NoticiaParaEditar = Pick<
   Noticia,
-  "id" | "titulo" | "resumo" | "conteudo" | "categoria_id"
+  "id" | "titulo" | "resumo" | "conteudo" | "categoria_id" | "foto"
 >;
 
 // uma notícia de quem está logado, pelo id, pra editar (ou null, se não existir ou se
@@ -197,7 +196,7 @@ export async function buscarNoticiaParaEditar(id: number) {
   const usuario = await exigirLogin();
   return tentar(async () => {
     const [noticia] = (await sql`
-      SELECT id, titulo, resumo, conteudo, categoria_id
+      SELECT id, titulo, resumo, conteudo, categoria_id, foto
       FROM noticias
       WHERE id = ${id} AND autor_id = ${usuario.id}
     `) as NoticiaParaEditar[];
@@ -217,7 +216,8 @@ export async function atualizarNoticia(
       UPDATE noticias
       SET titulo = ${dados.titulo}, resumo = ${dados.resumo},
         conteudo = ${dados.conteudo}, minutos = ${minutosDeLeitura(dados.conteudo)},
-        categoria_id = ${dados.categoria_id}, situacao = ${dados.situacao}
+        categoria_id = ${dados.categoria_id}, situacao = ${dados.situacao},
+        foto = ${dados.foto}
       WHERE id = ${id} AND autor_id = ${usuario.id}
       RETURNING id
     `;

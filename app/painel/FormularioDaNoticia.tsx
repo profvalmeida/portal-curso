@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useActionState } from "react";
 import type { CategoriaParaEscolher } from "../dados/categorias";
 import estilos from "../formulario.module.css";
+import { fotos } from "../lib/fotos";
+import galeria from "./galeria.module.css";
 import type { EstadoDaNoticia, ValoresDaNoticia } from "./acoes";
 
 type Props = {
@@ -61,6 +64,29 @@ export default function FormularioDaNoticia({
           <span className={estilos.erro}>{erros.categoria}</span>
         )}
       </label>
+      {/* um radio pra cada foto, escondido: o que aparece é a miniatura dentro do label */}
+      <fieldset className={galeria.campo}>
+        <legend>Foto</legend>
+        <div key={valores?.foto} className={galeria.grade}>
+          {fotos.map((foto) => (
+            <label key={foto} className={galeria.opcao}>
+              <input
+                type="radio"
+                name="foto"
+                value={foto}
+                defaultChecked={valores?.foto === foto}
+              />
+              <Image
+                src={`/fotos/${foto}`}
+                alt={foto.replace(".jpg", "")}
+                width={240}
+                height={135}
+              />
+            </label>
+          ))}
+        </div>
+        {erros.foto && <span className={estilos.erro}>{erros.foto}</span>}
+      </fieldset>
       <label className={estilos.campo}>
         Texto
         <textarea

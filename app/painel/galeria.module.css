@@ -1,0 +1,50 @@
+.campo {
+  border: 0;
+  font-weight: 600;
+}
+
+.campo legend {
+  margin-bottom: 4px;
+}
+
+/* as miniaturas em grade, quatro por linha */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--espaco-1);
+}
+
+.opcao {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  /* a borda de destaque já existe, transparente: só a cor muda */
+  outline: 3px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease;
+}
+
+.opcao img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* o radio sai da tela, mas continua funcionando: com o teclado e com o leitor de tela */
+.opcao input {
+  position: absolute;
+  opacity: 0;
+}
+
+/* :has() pergunta "este label tem um radio marcado dentro?". Se tem, a borda acende */
+.opcao:has(input:checked) {
+  outline-color: var(--cor-destaque);
+}
+
+/* navegando com o teclado, a miniatura em foco também aparece */
+.opcao:has(input:focus-visible) {
+  outline-color: var(--cor-texto-suave);
+}
