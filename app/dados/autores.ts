@@ -76,3 +76,16 @@ export async function trocarSenha(
   await encerrarOutrasSessoes(usuario.id);
   return { ok: true, dados: null };
 }
+
+// DTO da página pública do autor: o que qualquer visitante pode ver (o e-mail fica de fora)
+export type PerfilPublico = Pick<Usuario, "id" | "nome" | "bio" | "criado_em">;
+
+// um autor pelo id, ou null se não existir
+export function buscarPerfilPublico(id: number) {
+  return tentar(async () => {
+    const [autor] = (await sql`
+      SELECT id, nome, bio, criado_em FROM usuarios WHERE id = ${id}
+    `) as PerfilPublico[];
+    return autor ?? null;
+  }, "Não foi possível carregar o autor agora.");
+}

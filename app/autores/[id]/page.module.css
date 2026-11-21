@@ -1,0 +1,17 @@
+/* o topo da página do autor: o nome grande, a bio e desde quando ele escreve no portal */
+.autor {
+  max-width: 68ch;
+}
+
+.bio {
+  margin-top: var(--espaco-1);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--cor-texto-suave);
+}
+
+.desde {
+  margin-top: var(--espaco-1);
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}

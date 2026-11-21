@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import BotaoCompartilhar from "../../componentes/BotaoCompartilhar";
 import MaisLidas from "../../componentes/MaisLidas";
@@ -40,7 +41,8 @@ export default async function PaginaDaNoticia({
         <h1 className={estilos.titulo}>{noticia.titulo}</h1>
         <p className={estilos.resumo}>{noticia.resumo}</p>
         <p className={estilos.detalhes}>
-          Por {noticia.autor} · {data} · {noticia.minutos} min de leitura
+          Por <Link href={`/autores/${noticia.autor_id}`}>{noticia.autor}</Link>{" "}
+          · {data} · {noticia.minutos} min de leitura
         </p>
         <BotaoCompartilhar />
         {paragrafos.map((paragrafo, i) => (

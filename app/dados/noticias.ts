@@ -82,6 +82,22 @@ export function listarManchetesDaCategoria(slug: string) {
   }, "Não foi possível carregar a categoria agora.");
 }
 
+// as notícias publicadas de um autor, das mais novas pras mais antigas
+export function listarManchetesDoAutor(autorId: number) {
+  return tentar(
+    async () =>
+      (await sql`
+        SELECT noticias.id, noticias.slug, categorias.nome AS categoria,
+          categorias.slug AS categoria_slug, titulo, resumo, minutos, foto
+        FROM noticias
+        JOIN categorias ON categorias.id = noticias.categoria_id
+        WHERE situacao = 'publicada' AND autor_id = ${autorId}
+        ORDER BY noticias.id DESC
+      `) as NoticiaResumida[],
+    "Não foi possível carregar as notícias do autor agora.",
+  );
+}
+
 // as três notícias mais lidas do portal
 export type MaisLida = Pick<Noticia, "slug" | "titulo">;
 
@@ -102,7 +118,13 @@ export function listarMaisLidas() {
 // tudo o que a página da notícia mostra
 export type NoticiaCompleta = Pick<
   Noticia,
-  "titulo" | "resumo" | "conteudo" | "minutos" | "publicada_em" | "foto"
+  | "titulo"
+  | "resumo"
+  | "conteudo"
+  | "minutos"
+  | "publicada_em"
+  | "foto"
+  | "autor_id"
 > & {
   categoria: string;
   autor: string;
@@ -112,7 +134,7 @@ export type NoticiaCompleta = Pick<
 export function buscarNoticia(slug: string) {
   return tentar(async () => {
     const [noticia] = (await sql`
-      SELECT titulo, resumo, conteudo, minutos, publicada_em, foto,
+      SELECT titulo, resumo, conteudo, minutos, publicada_em, foto, autor_id,
         categorias.nome AS categoria, usuarios.nome AS autor
       FROM noticias
       JOIN categorias ON categorias.id = noticias.categoria_id
