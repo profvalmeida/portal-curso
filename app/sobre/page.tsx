@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { nomesDaEquipe } from "../lib/equipe";
 import estilos from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function Sobre() {
         Este portal é publicado na Vercel e se atualiza sozinho a cada envio de
         código.
       </p>
+      <p>Na redação: {nomesDaEquipe.join(", ")}.</p>
     </main>
   );
 }
