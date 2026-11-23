@@ -14,6 +14,10 @@ export default function Sobre() {
       <p>
         Aqui você encontra as notícias da cidade, escritas pela nossa equipe.
       </p>
+      <p>
+        Este portal é publicado na Vercel e se atualiza sozinho a cada envio de
+        código.
+      </p>
     </main>
   );
 }
